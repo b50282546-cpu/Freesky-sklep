@@ -91,6 +91,7 @@ async function handleInteractions(request, env) {
     return Response.json({ type: 4, data: { content: "Najpierw potwierdź płatność.", flags: 64 } });
   }
   order.status = action === "paid" ? "paid" : "done";
+  if (action === "paid") order.deliveryStatus = "pending";
   order.updatedAt = new Date().toISOString();
   order.updatedBy = interaction.member?.user?.id || interaction.user?.id || "unknown";
   await env.ORDERS_KV.put("order:" + orderId, JSON.stringify(order));
@@ -117,6 +118,38 @@ async function handleInteractions(request, env) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    // Private Paper-plugin bridge. GAME_BRIDGE_SECRET must never be exposed to browser code.
+    if (url.pathname === "/deliveries" || url.pathname === "/deliveries/ack") {
+      const expected = env.GAME_BRIDGE_SECRET || "";
+      if (!expected || (request.headers.get("Authorization") || "") !== "Bearer " + expected) return new Response("Unauthorized", { status: 401 });
+      if (!env.ORDERS_KV) return new Response("KV unavailable", { status: 503 });
+      if (url.pathname === "/deliveries" && request.method === "GET") {
+        const listed = await env.ORDERS_KV.list({ prefix: "order:", limit: 1000 });
+        const lines = [];
+        for (const key of listed.keys) {
+          const raw = await env.ORDERS_KV.get(key.name);
+          if (!raw) continue;
+          const order = JSON.parse(raw);
+          if (["paid", "done"].includes(order.status) && order.deliveryStatus === "pending") {
+            const amount = Math.round(Number(order.totalCents || 0) / 100);
+            if (amount > 0 && /^[A-F0-9]{8}$/.test(order.orderId || "") && /^[A-Za-z0-9_]{3,16}$/.test(order.nick || "")) lines.push(order.orderId + "|" + order.nick + "|" + amount);
+          }
+        }
+        return new Response(lines.join("\n"), { headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" } });
+      }
+      if (url.pathname === "/deliveries/ack" && request.method === "POST") {
+        const orderId = (await request.text()).trim();
+        if (!/^[A-F0-9]{8}$/.test(orderId)) return new Response("Bad order id", { status: 400 });
+        const raw = await env.ORDERS_KV.get("order:" + orderId);
+        if (!raw) return new Response("Not found", { status: 404 });
+        const order = JSON.parse(raw);
+        if (!["paid", "done"].includes(order.status)) return new Response("Not paid", { status: 409 });
+        order.deliveryStatus = "delivered"; order.deliveredAt = new Date().toISOString();
+        await env.ORDERS_KV.put("order:" + orderId, JSON.stringify(order));
+        return new Response("OK", { status: 200 });
+      }
+      return new Response("Method not allowed", { status: 405 });
+    }
     if (url.pathname === "/interactions") {
       if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
       return handleInteractions(request, env);
