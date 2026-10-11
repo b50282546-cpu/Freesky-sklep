@@ -384,6 +384,29 @@ body[data-theme="dark"] .terms-modal .terms-box,body[data-theme="dark"] .modalbo
 .ranking-card .staff-head{align-items:center}
 .ranking-avatar{display:grid;place-items:center;flex:none;object-fit:contain;background:var(--green);color:var(--white);font-size:25px;font-weight:950}
 .ranking-card .staff-info p{max-width:520px}
+
+/* Spójne ciemne przyciski — bez białych teł odstających od wyglądu FreeSky. */
+:root{--panel:#10141b}
+button,.navlinks .tab-link,.filter,.coupon-row button,.theme-toggle,.server button{
+ color:var(--white);
+}
+button,.filter,.coupon-row button,.theme-toggle{
+ background-color:#151a22;
+ border-color:var(--line);
+}
+.navlinks .tab-link{background:transparent}
+.navlinks .tab-link:hover,.navlinks .tab-link.active{
+ background:#ff9f0018;
+ border-color:#ff9f004d;
+ color:var(--green);
+}
+.server button{background:#19191d;color:#fff;border:1px solid #303039}
+.primary-cta,.checkout{background:var(--green);color:#19191d;border-color:var(--green)}
+.mode-card,.back-home,.filter,.coupon-row button,.theme-toggle{
+ background:#151a22;
+ color:var(--white);
+}
+input,select,textarea{color:var(--white)}
 </style>
 </head>
 <body><div id="fsLoader" aria-label="Ładowanie strony" role="status"><div class="fs-loader-content"><div class="fs-loader-logo">FREE<span>SKY</span></div><div class="fs-loader-ring"></div><div class="fs-loader-caption">Ładowanie serwera...</div><div class="fs-loader-bar"></div></div></div><div id="particleField" aria-hidden="true"></div><div class="wrap">
