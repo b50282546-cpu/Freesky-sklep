@@ -388,13 +388,13 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
 
     private void openAdmin(Player player,String category) {
         AdminHolder holder=new AdminHolder();
-        Inventory inv=Bukkit.createInventory(holder,GUI_SIZE,LegacyComponentSerializer.legacySection().deserialize("§2§lFreeSky §8» §cEdytor sklepu")); holder.inventory=inv;
+        Inventory inv=Bukkit.createInventory(holder,GUI_SIZE,LegacyComponentSerializer.legacySection().deserialize("§2§lFreeSky §8» §cEdytor sklepu")); holder.inventory=inv; holder.category=category;
         ItemStack border=named(Material.GRAY_STAINED_GLASS_PANE,"§r");
         for(int i=0;i<GUI_SIZE;i++) if(i<9||i>=45||i%9==0||i%9==8) inv.setItem(i,border);
         for(int i=0;i<shopCategories.size();i++){String cat=shopCategories.get(i);inv.setItem(9+i,named(cat.equals(category)?Material.LIME_DYE:Material.PAPER,(cat.equals(category)?"§a§l":"§f")+cat,"§7Kliknij kategorię."));}
-        ConfigurationSection shop=getConfig().getConfigurationSection("shop"); int slot=18;
-        if(shop!=null) for(String id:shop.getKeys(false)){ConfigurationSection p=shop.getConfigurationSection(id);if(p==null||!p.getString("category","Przedmioty").equals(category))continue;if(slot>=44)break;Material mat=Material.matchMaterial(p.getString("material","EMERALD"));if(mat==null||mat.isAir())mat=Material.EMERALD;
-          inv.setItem(slot++,named(mat,(p.getBoolean("enabled",true)?"§a":"§c")+p.getString("name",id),"§7Cena: §e"+p.getLong("price",0)+" VPLN","§eLewy klik: +10 VPLN","§ePrawy klik: -10 VPLN","§eShift + klik: włącz/wyłącz","§cShift + prawy: usuń"));}
+        ConfigurationSection shop=getConfig().getConfigurationSection("shop"); int slot=19;
+        if(shop!=null) for(String id:shop.getKeys(false)){ConfigurationSection p=shop.getConfigurationSection(id);if(p==null||!p.getString("category","Przedmioty").equals(category))continue;if(slot>=44)break;if(slot%9==0||slot%9==8)slot++;if(slot>=44)break;Material mat=Material.matchMaterial(p.getString("material","EMERALD"));if(mat==null||mat.isAir())mat=Material.EMERALD;
+          inv.setItem(slot,named(mat,(p.getBoolean("enabled",true)?"§a":"§c")+p.getString("name",id),"§7Cena: §e"+p.getLong("price",0)+" VPLN","§eLewy klik: +10 VPLN","§ePrawy klik: -10 VPLN","§eShift + klik: włącz/wyłącz","§cShift + prawy: usuń"));slot++;}
         inv.setItem(45,named(Material.HOPPER,"§aDodaj produkt z ręki","§7Weź przedmiot do ręki i kliknij tutaj.","§7Cena początkowa: 10 VPLN."));inv.setItem(49,named(Material.BARRIER,"§cZamknij"));player.openInventory(inv);
     }
     private void handleAdminClick(Player player,InventoryClickEvent event) {
@@ -402,8 +402,8 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
         if(slot>=9&&slot<=13){int idx=slot-9;if(idx<shopCategories.size())openAdmin(player,shopCategories.get(idx));return;}
         if(slot==49){player.closeInventory();return;}
         if(slot==45){ItemStack hand=player.getInventory().getItemInMainHand();if(hand==null||hand.getType().isAir()){player.sendMessage("§cWeź produkt do ręki.");return;}
-          String category="Przedmioty";String id=hand.getType().name().toLowerCase(Locale.ROOT)+"_"+(System.currentTimeMillis()%100000);
-          ConfigurationSection p=getConfig().createSection("shop."+id);p.set("enabled",true);p.set("name",hand.hasItemMeta()&&hand.getItemMeta().hasDisplayName()?LegacyComponentSerializer.legacySection().serialize(hand.getItemMeta().displayName()):hand.getType().name().replace('_',' '));p.set("material",hand.getType().name());p.set("amount",Math.max(1,hand.getAmount()));p.set("price",10);p.set("category",category);p.set("lore",List.of("Produkt dodany z panelu GUI."));p.set("commands",List.of());saveConfig();player.sendMessage("§aDodano produkt do kategorii Przedmioty za 10 VPLN.");openAdmin(player,category);return;}
+          String category=((AdminHolder)event.getView().getTopInventory().getHolder()).category;String id=hand.getType().name().toLowerCase(Locale.ROOT)+"_"+(System.currentTimeMillis()%100000);
+          ConfigurationSection p=getConfig().createSection("shop."+id);p.set("enabled",true);p.set("name",hand.hasItemMeta()&&hand.getItemMeta().hasDisplayName()?LegacyComponentSerializer.legacySection().serialize(hand.getItemMeta().displayName()):hand.getType().name().replace('_',' '));p.set("material",hand.getType().name());p.set("amount",Math.max(1,hand.getAmount()));p.set("price",10);p.set("category",category);p.set("lore",List.of("Produkt dodany z panelu GUI."));p.set("commands",List.of());saveConfig();player.sendMessage("§aDodano produkt do kategorii "+category+" za 10 VPLN.");openAdmin(player,category);return;}
         if(slot<18||slot>=44||current==null||!current.hasItemMeta())return;
         String shown=LegacyComponentSerializer.legacySection().serialize(current.getItemMeta().displayName());ConfigurationSection shop=getConfig().getConfigurationSection("shop");if(shop==null)return;
         for(String id:shop.getKeys(false)){ConfigurationSection p=shop.getConfigurationSection(id);if(p==null||!shown.endsWith(p.getString("name",id)))continue;
@@ -429,7 +429,7 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
       Bukkit.broadcastMessage("§8[§aFreeSky§8] §f"+nick+" §7otrzymał §e"+amount+" VPLN §7za potwierdzone zamówienie §8("+orderId+")§7.");if(online!=null)online.sendMessage("§aOtrzymujesz §e"+amount+" VPLN §aza potwierdzone zamówienie sklepu!");acknowledgeDelivery(orderId,base,secret);
     }
     private void acknowledgeDelivery(String id,String base,String secret){Bukkit.getScheduler().runTaskAsynchronously(this,()->{try{HttpRequest req=HttpRequest.newBuilder(URI.create(base.replaceAll("/+$","")+"/deliveries/ack")).timeout(Duration.ofSeconds(8)).header("Authorization","Bearer "+secret).POST(HttpRequest.BodyPublishers.ofString(id,StandardCharsets.UTF_8)).build();httpClient.send(req,HttpResponse.BodyHandlers.discarding());}catch(Exception e){getLogger().fine("Ack delivery "+id+": "+e.getMessage());}});}
-    private static final class AdminHolder implements InventoryHolder { private Inventory inventory; @Override public Inventory getInventory(){return inventory;} }
+    private static final class AdminHolder implements InventoryHolder { private Inventory inventory; private String category="Przedmioty"; @Override public Inventory getInventory(){return inventory;} }
 
     private static final class WalletHolder implements InventoryHolder {
         private Inventory inventory;
