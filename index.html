@@ -34,6 +34,51 @@
 .coupon-row{display:flex;gap:8px;margin:12px 0}.coupon-row input{min-width:0;flex:1;background:#080b10;color:var(--white);border:1px solid var(--line);border-radius:9px;padding:10px;font:inherit;font-size:13px;text-transform:uppercase}.coupon-row button{border:1px solid #7cf29a55;background:#7cf29a12;color:var(--green);border-radius:9px;padding:8px 11px;font-weight:850;font-size:12px}.coupon-message{font-size:12px;color:var(--muted);min-height:18px}.coupon-message.good{color:var(--green)}.discount-line{display:flex;justify-content:space-between;color:var(--green);font-size:13px;margin-top:8px}.discount-line[hidden]{display:none}.store-only .hero,.store-only .player-banner,.store-only #ostatnie,.store-only #ranking,.store-only #tryby,.store-only #administracja,.store-only .foot{display:none!important}.back-home{display:none;margin:20px 0 0;border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:#101720;color:var(--white);font-weight:800}.store-only .back-home{display:inline-flex}
 @media(max-width:680px){.player-banner{grid-template-columns:1fr}.player-tile{padding:13px}.player-tile .big{font-size:22px}}
 
+
+/* FreeSky redesign: układ inspirowany sklepami serwerów Minecraft */
+body{background:radial-gradient(ellipse at 50% -18%,#1b3c2b 0,transparent 48%),#090d12}
+.wrap{width:min(1160px,calc(100% - 36px))}
+.nav{padding:18px 0}
+.brand{font-size:25px}
+.navlinks a{font-size:13px}
+.hero{display:block;text-align:center;min-height:0;padding:64px 0 34px;max-width:850px;margin:0 auto}
+.hero-copy{display:flex;flex-direction:column;align-items:center}
+.hero h1{font-size:clamp(40px,6.5vw,66px);line-height:1.08;letter-spacing:-2px;margin:17px 0 13px}
+.hero p{max-width:640px;margin:0 auto 22px}
+.hero-art{display:none}
+.hero-actions{justify-content:center}
+.status{justify-content:center}
+.player-banner{gap:14px;margin:0 0 44px}
+.player-tile{background:linear-gradient(135deg,#121b23,#0e151c);padding:18px 20px;border-radius:14px}
+.home-section{margin:46px 0}
+.sectionhead{margin-bottom:19px}
+.sectionhead h2{font-size:28px;letter-spacing:-.5px}
+.section-kicker{font-size:10px}
+.activity-panel,.ranking-empty{background:linear-gradient(110deg,#121a22,#0e151c);min-height:112px;border-radius:14px}
+.activity-panel strong,.ranking-empty strong{font-size:15px}
+.mode-grid{grid-template-columns:minmax(260px,360px);justify-content:center}
+.mode-card{min-height:178px;padding:23px;border-radius:15px;box-shadow:0 12px 30px #0002}
+.mode-card.mode-skypvp{background:linear-gradient(135deg,#183323,#111a20);border-color:#7cf29a55}
+.admin-section{border-radius:15px}
+.store-heading{margin-top:22px}
+.product,.cart,.rank{border-radius:14px}
+.product{background:linear-gradient(145deg,#141e27,#0f151c)}
+.buy{border-radius:9px}
+.cart{background:#111820}
+.foot{margin-top:48px}
+@media(max-width:780px){
+ .hero{padding:45px 0 30px}
+ .player-banner{grid-template-columns:1fr;gap:9px;margin-bottom:34px}
+ .mode-grid{grid-template-columns:minmax(0,1fr)}
+ .mode-card{min-height:150px}
+}
+@media(max-width:480px){
+ .wrap{width:min(100% - 24px,1160px)}
+ .hero h1{font-size:clamp(37px,11vw,48px);letter-spacing:-1.3px}
+ .hero-actions{width:100%}
+ .hero-actions a,.hero-actions button{width:100%}
+}
+
 </style>
 </head>
 <body><div class="wrap">
