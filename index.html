@@ -202,9 +202,30 @@ body:not([data-theme="light"]) button:disabled {
 .terms-box h2{margin:0 0 6px}.terms-box h3{font-size:15px;margin:20px 0 5px;color:var(--green)}.terms-box p,.terms-box li{font-size:13px;color:#c5d0da}.terms-box ul{padding-left:20px}.terms-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.terms-close{border:1px solid var(--line);background:#050607;color:var(--green);border-radius:9px;padding:8px 12px}
 body[data-theme="light"] .terms-box{background:#fff;color:#17202a}body[data-theme="light"] .terms-box p,body[data-theme="light"] .terms-box li{color:#485564}
 
+
+/* Delikatne animacje i cząsteczki tła */
+#particleField{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:strict;opacity:.62}
+#particleField .particle{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;background:var(--green);opacity:var(--o);box-shadow:0 0 9px #7cf29a70;animation:particleDrift var(--d) ease-in-out var(--delay) infinite alternate}
+#particleField .particle:nth-child(3n){border-radius:2px;transform:rotate(45deg);background:#c3ffd0;box-shadow:0 0 8px #7cf29a50}
+body>.wrap{position:relative;z-index:1}
+.nav,.stat,.product,.cart,.rank,.activity-panel,.ranking-empty,.mode-card,.admin-section,.staff-card,.player-tile{transition:transform .28s ease,border-color .28s ease,background-color .28s ease,box-shadow .28s ease}
+.product:hover,.staff-card:hover{transform:translateY(-4px);border-color:#7cf29a65;box-shadow:0 14px 36px #0002,0 0 20px #7cf29a09}
+.stat:hover,.player-tile:hover{border-color:#7cf29a60;transform:translateY(-2px)}
+.primary-cta,.secondary-cta,.buy,.filter,.terms-link,.theme-toggle{transition:transform .2s ease,background .25s ease,border-color .25s ease,box-shadow .25s ease}
+.primary-cta:hover,.secondary-cta:hover,.buy:hover,.terms-link:hover{transform:translateY(-2px);box-shadow:0 7px 22px #7cf29a1a}
+.hero-art{animation:artFloat 8s ease-in-out infinite}
+.orbit-one{animation:orbitPulse 7s ease-in-out infinite}
+.orbit-two{animation:orbitPulse 9s ease-in-out -2s infinite reverse}
+@keyframes particleDrift{from{transform:translate3d(0,0,0);filter:brightness(.8)}to{transform:translate3d(var(--dx),var(--dy),0);filter:brightness(1.35)}}
+@keyframes artFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes orbitPulse{0%,100%{opacity:.45}50%{opacity:.95}}
+body[data-theme="light"] #particleField{opacity:.28}
+@media(prefers-reduced-motion:reduce){#particleField .particle,.hero-art,.orbit-one,.orbit-two{animation:none!important}*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
+@media(max-width:780px){#particleField{opacity:.42}.hero-art{animation:none}}
+
 </style>
 </head>
-<body><div class="wrap">
+<body><div id="particleField" aria-hidden="true"></div><div class="wrap">
 <header class="nav"><a class="brand" href="#" aria-label="FreeSky strona główna">FREE<span>SKY</span></a><nav class="navlinks"><a href="#tryby">Tryby</a><a href="#ostatnie">Ostatnie zakupy</a><a href="#ranking">Topka</a><a href="#sklep">Sklep</a></nav><div class="server"><span class="iplabel">IP:</span> <strong id="ipText">free1.gemhost.pl:31962</strong><button id="copyIp">Kopiuj IP</button><button id="themeToggle" class="theme-toggle" type="button" aria-label="Włącz jasny motyw" title="Zmień motyw">☀ Jasny</button></div></header>
 <section class="hero"><div class="hero-copy"><span class="eyebrow"><span class="eyedot"></span> OFICJALNY SERWER MINECRAFT</span><h1>Twój ulubiony<br><span>serwer Minecraft!</span></h1><p>Dołącz do społeczności FreeSky i przeżyj niezapomniane przygody. Skopiuj IP serwera i wskakuj do gry!</p><div class="hero-actions"><button class="primary-cta" id="heroCopyIp">▶ SKOPIUJ IP SERWERA</button><a class="secondary-cta" href="https://dc.gg/freesky" target="_blank" rel="noopener noreferrer">DOŁĄCZ NA DISCORDA</a></div><div class="status"><span class="dot"></span> Java Edition • IP: free1.gemhost.pl:31962</div></div><div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="block-scene"><div class="mc-block block-grass"><i></i></div><div class="mc-block block-stone"></div><div class="mc-block block-diamond">◆</div></div><div class="floating-label label-one">✦ MINECRAFT</div><div class="floating-label label-two">✧ FREESKY</div></div></section>
 
@@ -255,6 +276,29 @@ document.getElementById("openTerms").addEventListener("click",()=>termsModal.cla
 document.getElementById("closeTerms").addEventListener("click",()=>termsModal.classList.remove("open"));
 termsModal.addEventListener("click",e=>{if(e.target===termsModal)termsModal.classList.remove("open");});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")termsModal.classList.remove("open");});
+
+
+/* Lekkie, losowo rozmieszczone cząsteczki — bez bibliotek */
+(function(){
+ const field=document.getElementById("particleField");
+ if(!field||window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+ const count=window.matchMedia("(max-width: 600px)").matches?18:32;
+ const frag=document.createDocumentFragment();
+ for(let i=0;i<count;i++){
+  const p=document.createElement("i");
+  p.className="particle";
+  p.style.setProperty("--x",(Math.random()*100)+"%");
+  p.style.setProperty("--y",(Math.random()*100)+"%");
+  p.style.setProperty("--s",(2+Math.random()*2.5)+"px");
+  p.style.setProperty("--o",(0.18+Math.random()*0.38).toFixed(2));
+  p.style.setProperty("--d",(5+Math.random()*9)+"s");
+  p.style.setProperty("--delay",(-Math.random()*12)+"s");
+  p.style.setProperty("--dx",(-24+Math.random()*48)+"px");
+  p.style.setProperty("--dy",(-30+Math.random()*60)+"px");
+  frag.appendChild(p);
+ }
+ field.appendChild(frag);
+})();
 
 document.getElementById("year").textContent=new Date().getFullYear();renderProducts();renderCart();
 
