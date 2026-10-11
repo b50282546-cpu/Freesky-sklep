@@ -170,6 +170,29 @@ body:not([data-theme="light"]) .cancel {
   color:var(--green);
 }
 
+
+/* Wymuszenie czarnych przycisków w trybie ciemnym */
+body:not([data-theme="light"]) button,
+body:not([data-theme="light"]) a.primary-cta,
+body:not([data-theme="light"]) a.secondary-cta,
+body:not([data-theme="light"]) .back-home {
+  background:#050607 !important;
+  color:#7cf29a !important;
+  border-color:#26313d !important;
+}
+body:not([data-theme="light"]) button:hover,
+body:not([data-theme="light"]) a.primary-cta:hover,
+body:not([data-theme="light"]) a.secondary-cta:hover,
+body:not([data-theme="light"]) .back-home:hover {
+  background:#15191d !important;
+  color:#a5ffb7 !important;
+  border-color:#7cf29a80 !important;
+}
+body:not([data-theme="light"]) button:disabled {
+  background:#08090b !important;
+  color:#778391 !important;
+}
+
 </style>
 </head>
 <body><div class="wrap">
