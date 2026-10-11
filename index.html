@@ -128,6 +128,48 @@ body[data-theme="light"] .filter.active{background:#e5f8eb;color:#237442;border-
 body[data-theme="light"] .recruit-icon,body[data-theme="light"] .admin-mark,body[data-theme="light"] .activity-symbol{background:#e3f7e9;color:#237442}
 @media(max-width:480px){.theme-toggle{margin-left:0}.server{display:flex;align-items:center;flex-wrap:wrap;gap:5px}}
 
+
+/* Ciemny motyw: przyciski i kontrolki w czerni/grafitach */
+body:not([data-theme="light"]) button,
+body:not([data-theme="light"]) .primary-cta,
+body:not([data-theme="light"]) .secondary-cta {
+  background:#080b10;
+  color:var(--green);
+  border:1px solid #26313d;
+}
+body:not([data-theme="light"]) button:hover,
+body:not([data-theme="light"]) .primary-cta:hover,
+body:not([data-theme="light"]) .secondary-cta:hover {
+  background:#151c24;
+  border-color:#7cf29a80;
+  color:#a5ffb7;
+}
+body:not([data-theme="light"]) .buy,
+body:not([data-theme="light"]) .checkout.ready,
+body:not([data-theme="light"]) .sendorder {
+  background:#080b10;
+  color:var(--green);
+  border:1px solid #7cf29a66;
+}
+body:not([data-theme="light"]) .filter.active,
+body:not([data-theme="light"]) .filter:hover,
+body:not([data-theme="light"]) .coupon-row button {
+  background:#080b10;
+  color:var(--green);
+}
+body:not([data-theme="light"]) .checkout:disabled {
+  background:#080b10;
+  color:#778391;
+  border:1px solid #26313d;
+}
+body:not([data-theme="light"]) .qty button,
+body:not([data-theme="light"]) .server button,
+body:not([data-theme="light"]) .back-home,
+body:not([data-theme="light"]) .cancel {
+  background:#080b10;
+  color:var(--green);
+}
+
 </style>
 </head>
 <body><div class="wrap">
