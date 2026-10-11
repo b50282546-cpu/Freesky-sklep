@@ -151,7 +151,15 @@ export default {
         const topEntry = Object.entries(sums).sort((a,b) => b[1]-a[1])[0];
         return json({
           last: orders[0] ? { nick: orders[0].nick, amount: orders[0].totalCents || 0 } : null,
-          top: topEntry ? { nick: topEntry[0], amount: topEntry[1] } : null
+          top: topEntry ? { nick: topEntry[0], amount: topEntry[1] } : null,
+          recent: orders.slice(0, 30).map(order => ({
+            nick: order.nick,
+            amount: order.totalCents || 0,
+            items: (Array.isArray(order.items) ? order.items : []).map(item => ({
+              name: clean(item.name, 80),
+              qty: Math.max(1, Math.min(100000000, Number(item.qty) || 1))
+            }))
+          }))
         }, 200, origin);
       } catch {
         return json({ last: null, top: null }, 200, origin);
