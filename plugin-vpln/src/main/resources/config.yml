@@ -78,3 +78,11 @@ shop:
     lore:
       - "16 fajerwerków."
     commands: []
+
+# Most do sklepu internetowego; sekret musi być zgodny z Cloudflare GAME_BRIDGE_SECRET.
+web-bridge:
+  enabled: false
+  url: "https://TWOJ-WORKER.workers.dev"
+  secret: "USTAW_TEN_SAM_SEKRET_CO_GAME_BRIDGE_SECRET"
+  title: "&a&lZAKUP POTWIERDZONY!"
+  subtitle: "&f%player% &7otrzymał &e%amount% VPLN"
