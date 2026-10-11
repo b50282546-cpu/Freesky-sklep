@@ -12,7 +12,7 @@ function json(body, status = 200, origin = "") {
     headers: {
       "content-type": "application/json; charset=utf-8",
       "access-control-allow-origin": origin === ALLOWED_ORIGIN ? ALLOWED_ORIGIN : "null",
-      "access-control-allow-methods": "POST, OPTIONS",
+      "access-control-allow-methods": "GET, POST, OPTIONS",
       "access-control-allow-headers": "content-type",
       "vary": "Origin"
     }
@@ -134,6 +134,29 @@ export default {
       }});
     }
     if (origin !== ALLOWED_ORIGIN) return json({ error: "Origin niedozwolony." }, 403, origin);
+    if (request.method === "GET" && url.pathname === "/stats") {
+      if (!env.ORDERS_KV) return json({ last: null, top: null }, 200, origin);
+      try {
+        const listed = await env.ORDERS_KV.list({ prefix: "order:", limit: 1000 });
+        const orders = [];
+        for (const key of listed.keys) {
+          const raw = await env.ORDERS_KV.get(key.name);
+          if (!raw) continue;
+          const order = JSON.parse(raw);
+          if (order.status === "paid" || order.status === "done") orders.push(order);
+        }
+        orders.sort((a,b) => String(b.updatedAt || b.createdAt).localeCompare(String(a.updatedAt || a.createdAt)));
+        const sums = {};
+        for (const order of orders) sums[order.nick] = (sums[order.nick] || 0) + Number(order.totalCents || 0);
+        const topEntry = Object.entries(sums).sort((a,b) => b[1]-a[1])[0];
+        return json({
+          last: orders[0] ? { nick: orders[0].nick, amount: orders[0].totalCents || 0 } : null,
+          top: topEntry ? { nick: topEntry[0], amount: topEntry[1] } : null
+        }, 200, origin);
+      } catch {
+        return json({ last: null, top: null }, 200, origin);
+      }
+    }
     if (request.method !== "POST" || url.pathname !== "/orders") return json({ error: "Nie znaleziono endpointu." }, 404, origin);
     if (!env.DISCORD_BOT_TOKEN || !env.DISCORD_CHANNEL_ID || !env.ORDERS_KV) {
       return json({ error: "Integracja Discord lub magazyn zamówień nie jest skonfigurowany." }, 503, origin);
@@ -177,7 +200,7 @@ export default {
           { name: "Nick Minecraft", value: nick, inline: true },
           { name: "Kontakt Discord", value: discord, inline: true },
           { name: "Produkty", value: itemLines.join("\n").slice(0, 1024) },
-          { name: "Suma koszyka", value: (total / 100).toFixed(2) + " zł", inline: true },
+          { name: "Suma koszyka", value: (total / 100).toFixed(2) + " zł", inline: true },\n          ...(couponPercent ? [{ name: "Kod rabatowy", value: couponCode + " (-" + couponPercent + "%)", inline: true }, { name: "Rabat", value: (discount / 100).toFixed(2) + " zł", inline: true }] : []),\n          { name: "Do zapłaty po rabacie", value: (finalTotal / 100).toFixed(2) + " zł", inline: true },
           { name: "Status", value: statusLabel("pending") }
         ],
         footer: { text: "FreeSky • zgłoszenie sklepu, nie potwierdzenie płatności" },
