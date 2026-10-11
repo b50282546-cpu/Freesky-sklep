@@ -260,6 +260,123 @@ button:active,.primary-cta:active,.secondary-cta:active,.mode-card:active{transf
 body[data-tab="home"] .hero,body[data-tab="home"] .player-banner{display:revert}
 @media(max-width:780px){.navlinks{order:3;width:100%;justify-content:center;margin:0!important;padding-top:8px}.navlinks .tab-link{padding:8px 9px;font-size:12px}}
 
+
+/* Nowy wygląd FreeSky — jasny, nowoczesny układ */
+:root{color-scheme:light;--bg:#f5f5f7;--panel:#fff;--line:#e5e5e9;--muted:#85858d;--green:#ff9f00;--green2:#f08b00;--white:#19191d}
+body{background:#f5f5f7;color:#19191d}
+.wrap{width:min(1045px,calc(100% - 36px))}
+.nav{position:sticky;top:0;z-index:8;padding:12px 0;background:#f5f5f7ed;backdrop-filter:blur(16px);border-bottom:1px solid #e6e6e9}
+.brand{color:#17171b;font-size:22px;letter-spacing:1.3px}
+.brand span{color:#ff9f00}
+.navlinks{margin:auto;gap:4px;padding:5px;border:1px solid #e8e8eb;background:white;border-radius:999px;box-shadow:0 2px 8px #00000006}
+.navlinks a{color:#55545c;padding:9px 15px;border-radius:999px}
+.navlinks a:hover,.navlinks a.active{background:#f1f1f4;color:#17171b}
+.server{display:flex;align-items:center;gap:6px;color:#25252a;font-size:12px}
+.server button{background:#19191d;color:#fff;border:0;border-radius:999px;padding:10px 13px}
+.theme-toggle{background:#fff!important;color:#222!important;border:1px solid #e2e2e6!important}
+.hero{width:100%;max-width:none;min-height:390px;text-align:left;display:grid;grid-template-columns:1.2fr .8fr;gap:25px;align-items:center;padding:46px 54px;margin:28px auto 34px;border-radius:29px;background:radial-gradient(ellipse at 75% 45%,#32251a 0,#19191c 40%,#17171a 75%);color:#fff;box-shadow:0 22px 45px #e9a15d22;overflow:hidden;position:relative}
+.hero:after{content:"";position:absolute;right:7%;bottom:-75px;width:330px;height:330px;border-radius:50%;background:radial-gradient(circle,#ff9f0022,transparent 68%);pointer-events:none}
+.hero-copy{position:relative;z-index:2;align-items:flex-start}
+.eyebrow{background:#ffffff12;border-color:#ffffff26;color:#d6d6dc;letter-spacing:.8px}
+.eyedot{background:#43e58a;box-shadow:0 0 12px #43e58a}
+.hero h1{font-size:clamp(38px,4.5vw,55px);line-height:1.04;letter-spacing:-1.8px;color:#fff;margin:18px 0}
+.hero h1 span{background:none;color:#fff}
+.hero p{color:#d0d0d4;max-width:450px;font-size:15px}
+.hero .status{color:#d2d2d6;font-size:12px}
+.primary-cta{background:#ff9f00;color:#fff;box-shadow:0 7px 20px #ff9f0033;border-radius:11px;padding:14px 19px}
+.primary-cta:hover{background:#f28f00;transform:translateY(-1px)}
+.secondary-cta{background:#ffffff08;color:#fff;border-color:#ffffff2a;border-radius:11px;padding:13px 16px}
+.hero-art{display:grid;height:295px;border:0;background:transparent;z-index:1}
+.block-scene{transform:scale(1.15) rotate(-10deg)}
+.mc-block{box-shadow:16px 20px 0 #0005}
+.floating-label{background:#242428;color:#ffb53d;border-color:#ffffff22}
+.player-banner{grid-template-columns:1fr;gap:10px;margin:0 0 48px}
+.player-tile{background:#fff;border-color:#e8e8eb;border-radius:14px;box-shadow:0 2px 5px #00000005;color:#222;padding:12px 16px}
+.player-tile .big{color:#ff9f00}
+.player-tile small{color:#888891}
+.home-section{margin:46px 0}
+.sectionhead h2{color:#19191d;font-size:30px;letter-spacing:-.8px}
+.sectionhead p{color:#898991}
+.section-kicker{color:#ff9f00}
+.section-pill{color:#777780;border-color:#e5e5e9;background:#fff}
+.activity-panel,.ranking-empty{background:#fff;border-color:#e7e7eb;color:#1b1b20;box-shadow:0 2px 6px #00000005}
+.activity-panel p,.ranking-empty p{color:#85858d}
+.activity-symbol{background:#fff2df;color:#f29a00}
+.trophy{background:#fff4dd;color:#d89a2d}
+.mode-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.mode-card{align-items:center;text-align:center;min-height:320px;padding:25px;background:#fff!important;border:1px solid #e7e7eb!important;color:#202026;box-shadow:0 2px 5px #00000008;border-radius:20px}
+.mode-card:hover{transform:translateY(-4px);box-shadow:0 14px 28px #0000000d;border-color:#ffc56c!important}
+.mode-icon{width:100%;height:155px;display:grid;place-items:center;font-size:86px;margin:0 0 12px;color:#ff9f00}
+.mode-card strong{font-size:21px}
+.mode-card small{color:#777780}
+.mode-label{color:#f29a00}
+.mode-arrow{color:#f29a00}
+.mode-card:after{width:190px;height:190px;right:-75px;bottom:-100px;background:#ff9f000b}
+.mode-discord{background:#fff!important}
+.admin-section{background:linear-gradient(110deg,#fff,#fff7ed);border-color:#ffe0b1;color:#202026}
+.admin-section p{color:#777780}
+.admin-mark{background:#fff0d8;color:#f29a00}
+.staff-card{background:#fff;border-color:#e6e6eb;box-shadow:0 4px 14px #00000006}
+.staff-info .staff-role{background:#fff0d8;color:#e88a00}
+.staff-avatar{background:#f4f4f6;border-color:#ffe0b1}
+.staff-footer{border-top-color:#eee;color:#555}
+.staff-online{color:#777}
+.recruit-banner{background:linear-gradient(110deg,#fff,#fff7ed);border-color:#ffe0b1}
+.recruit-icon{background:#fff0d8;color:#f29a00}
+.recruit-copy p{color:#777780}
+.store-heading{margin-top:20px}
+.product,.cart,.rank{background:#fff;border-color:#e5e5e9;color:#202026;box-shadow:0 2px 6px #00000005}
+.product:before{background:#ff9f0010}
+.product p,.sub,.rank p{color:#85858d}
+.filter{color:#5f5f68;border-color:#e4e4e8}
+.filter.active,.filter:hover{background:#fff0d8;color:#e88a00;border-color:#ffc56c}
+.buy{background:#ff9f00;color:#fff}
+.buy:hover{background:#f28f00}
+.cartline{border-bottom-color:#eee}
+.cartline button{color:#c44}
+.qty button{background:#f5f5f7;color:#333;border-color:#e2e2e6}
+.checkout.ready{background:#ff9f00;color:#fff}
+.checkout.ready:hover{background:#f28f00}
+.checkout{background:#eee;color:#888}
+.coupon-row input,.modalbox input{background:#fff;color:#222;border-color:#e2e2e6}
+.coupon-row button{background:#fff0d8;color:#e88a00;border-color:#ffc56c}
+.discount-line,.coupon-message.good{color:#df8a00}
+.foot{border-top-color:#e4e4e8;color:#85858d}
+.terms-modal .terms-box,.modalbox{background:#fff;color:#222;border-color:#e4e4e8}
+.terms-head,.terms-modal h3{color:#222}
+.terms-modal p,.terms-modal li{color:#666}
+.cancel{color:#333}
+.sendorder{background:#ff9f00;color:#fff}
+#particleField{opacity:.45}
+.discord-feature{display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative;overflow:hidden;margin:44px 0;padding:34px 40px;border-radius:24px;background:linear-gradient(110deg,#08c5ed,#0878f5);color:white;box-shadow:0 18px 36px #078af52b}
+.discord-feature:after{content:"◉";position:absolute;right:12px;top:-100px;font-size:330px;line-height:1;color:#ffffff13;font-weight:900;pointer-events:none}
+.discord-feature .discord-copy{position:relative;z-index:1;flex:1;text-align:center}
+.discord-feature .discord-kicker{font-size:11px;font-weight:950;letter-spacing:1.5px}
+.discord-feature h2{font-size:clamp(24px,3vw,34px);line-height:1.15;margin:10px 0 18px;color:#fff}
+.discord-feature a{display:inline-flex;background:white;color:#0878f5;text-decoration:none;padding:13px 22px;border-radius:11px;font-size:13px;font-weight:950}
+.discord-feature .discord-emoji{font-size:76px;position:relative;z-index:1}
+body[data-theme="dark"]{color-scheme:dark;--bg:#080b10;--panel:#101720;--line:#26313d;--muted:#9aa8b7;--green:#7cf29a;--white:#f4f7fa;background:#080b10;color:#f4f7fa}
+body[data-theme="dark"] .nav{background:#080b10ed;border-bottom-color:#ffffff12}
+body[data-theme="dark"] .brand{color:#fff}
+body[data-theme="dark"] .navlinks{background:#101720;border-color:#26313d}
+body[data-theme="dark"] .navlinks a{color:#b7c3ce}
+body[data-theme="dark"] .navlinks a.active,body[data-theme="dark"] .navlinks a:hover{background:#202b35;color:#fff}
+body[data-theme="dark"] .hero{color:#fff;background:radial-gradient(ellipse at 75% 45%,#32251a 0,#19191c 40%,#17171a 75%)}
+body[data-theme="dark"] .hero h1,body[data-theme="dark"] .sectionhead h2{color:#fff}
+body[data-theme="dark"] .player-tile,body[data-theme="dark"] .activity-panel,body[data-theme="dark"] .ranking-empty,body[data-theme="dark"] .mode-card,body[data-theme="dark"] .product,body[data-theme="dark"] .cart,body[data-theme="dark"] .rank,body[data-theme="dark"] .staff-card{background:#101720!important;color:#f4f7fa;border-color:#26313d}
+body[data-theme="dark"] .mode-card small,body[data-theme="dark"] .activity-panel p,body[data-theme="dark"] .ranking-empty p{color:#9aa8b7}
+body[data-theme="dark"] .admin-section,body[data-theme="dark"] .recruit-banner{background:linear-gradient(110deg,#193425,#111920);color:#f4f7fa;border-color:#7cf29a30}
+body[data-theme="dark"] .admin-section p,body[data-theme="dark"] .recruit-copy p{color:#9aa8b7}
+body[data-theme="dark"] .theme-toggle{background:#101720!important;color:#fff!important;border-color:#26313d!important}
+body[data-theme="dark"] .filter{color:#b7c3ce;border-color:#26313d}
+body[data-theme="dark"] .filter.active{background:#7cf29a12;color:#7cf29a;border-color:#7cf29a70}
+body[data-theme="dark"] .buy,body[data-theme="dark"] .primary-cta{background:#7cf29a;color:#07100a}
+body[data-theme="dark"] .secondary-cta{background:#101720;color:#fff;border-color:#34434f}
+body[data-theme="dark"] .coupon-row input,body[data-theme="dark"] .modalbox input{background:#080b10;color:#fff;border-color:#26313d}
+body[data-theme="dark"] .terms-modal .terms-box,body[data-theme="dark"] .modalbox{background:#101720;color:#fff;border-color:#26313d}
+@media(max-width:780px){.hero{grid-template-columns:1fr;padding:30px 25px;min-height:0}.hero-art{height:190px}.navlinks{margin:0 auto;gap:2px}.navlinks a{padding:8px 10px}.mode-grid{grid-template-columns:1fr}.mode-card{min-height:270px}.discord-feature{padding:25px;flex-wrap:wrap;justify-content:center}.discord-feature .discord-emoji{font-size:52px}.discord-feature .discord-copy{flex-basis:100%;order:2}.discord-feature:after{font-size:230px;top:-50px}}
+@media(max-width:480px){.wrap{width:calc(100% - 22px)}.nav{position:relative;gap:9px}.navlinks{order:3;width:100%;overflow-x:auto;justify-content:flex-start}.navlinks a{white-space:nowrap;font-size:11px;padding:8px 11px}.server{margin-left:auto}.server #ipText,.server .iplabel{display:none}.server button{font-size:11px;padding:9px}.hero{margin-top:15px;padding:25px 20px;border-radius:20px}.hero h1{font-size:37px}.hero-art{height:160px}.hero-actions{width:100%}.hero-actions>*{width:100%}.player-banner{margin-bottom:30px}.sectionhead h2{font-size:25px}.discord-feature{margin:30px 0;padding:22px 18px;border-radius:18px}}
+
 </style>
 </head>
 <body><div id="fsLoader" aria-label="Ładowanie strony" role="status"><div class="fs-loader-content"><div class="fs-loader-logo">FREE<span>SKY</span></div><div class="fs-loader-ring"></div><div class="fs-loader-caption">Ładowanie serwera...</div><div class="fs-loader-bar"></div></div></div><div id="particleField" aria-hidden="true"></div><div class="wrap">
@@ -269,12 +386,12 @@ body[data-tab="home"] .hero,body[data-tab="home"] .player-banner{display:revert}
 <section class="player-banner" aria-label="Status serwera"><div class="player-tile"><div class="big">●</div><div><strong id="playerCount">Sprawdzanie…</strong><small id="serverStatus">Status serwera</small></div></div><div class="player-tile"><div class="big">↗</div><div><strong id="lastDonor">Brak danych</strong><small>Ostatnie potwierdzone doładowanie</small></div></div><div class="player-tile"><div class="big">♛</div><div><strong id="topDonor">Brak danych</strong><small id="topDonorAmount">Topka wydanych PLN</small></div></div></section>
 <section class="home-section" id="ostatnie"><div class="sectionhead"><div><span class="section-kicker">CO SŁYCHAĆ NA FREESKY</span><h2>Ostatnie zakupy</h2><p>Najnowsze zakupy społeczności FreeSky.</p></div><span class="section-pill">AKTUALNOŚCI</span></div><div class="activity-panel"><div class="activity-symbol">◷</div><div><strong>Brak potwierdzonych zakupów do wyświetlenia</strong><p>Gdy administracja potwierdzi zamówienia, będziemy mogli pokazać je tutaj. Nie wyświetlamy fikcyjnych zakupów.</p></div></div></section>
 <section class="home-section" id="ranking"><div class="sectionhead"><div><span class="section-kicker">GRACZE FREESKY</span><h2>Topka wydanych PLN</h2><p>Ranking będzie obejmował wyłącznie zamówienia potwierdzone przez administrację.</p></div><span class="section-pill">TOP GRACZE</span></div><div class="ranking-empty"><div class="trophy">♛</div><strong>Ranking w przygotowaniu</strong><p>Ranking pokaże graczy na podstawie potwierdzonych zakupów.</p></div></section>
-<section class="home-section" id="tryby"><div class="sectionhead"><div><span class="section-kicker">WYBIERZ SWOJĄ PRZYGODĘ</span><h2>Wybierz tryb</h2><p>Kliknij wybraną kartę, aby dołączyć do społeczności lub otworzyć sklep.</p></div></div><div class="mode-grid"><button class="mode-card mode-skypvp" id="openSkyPvP"><span class="mode-icon">⚔</span><span class="mode-label">TRYB SERWERA</span><strong>SkyPvP</strong><small>Kliknij, aby otworzyć sklep trybu SkyPvP</small><span class="mode-arrow">↗</span></button></div></section>
+<section class="home-section" id="tryby"><div class="sectionhead"><div><span class="section-kicker">WYBIERZ SWOJĄ PRZYGODĘ</span><h2>Wybierz tryb</h2><p>Kliknij wybraną kartę, aby dołączyć do społeczności lub otworzyć sklep.</p></div></div><div class="mode-grid"><button class="mode-card mode-skypvp" id="openSkyPvP"><span class="mode-icon">⚔</span><span class="mode-label">TRYB SERWERA</span><strong>SkyPvP</strong><small>Kliknij, aby otworzyć sklep trybu SkyPvP</small><span class="mode-arrow">↗</span></button><button class="mode-card mode-discord" id="openPractice"><span class="mode-icon">⚔</span><span class="mode-label">JUŻ WKRÓTCE</span><strong>Anarchia Practice</strong><small>Tryb w przygotowaniu</small><span class="mode-arrow">↗</span></button></div></section>
 
 <button type="button" class="back-home" id="backHome">← Wróć na stronę główną</button><div class="sectionhead store-heading" id="sklep"><div><span class="section-kicker">OFICJALNY SKLEP</span><h2>Sklep FreeSky</h2><p>Wybierz kategorię i dodaj produkty do koszyka.</p></div><span class="section-pill">BEZPIECZNE ZGŁOSZENIA</span></div>
 <div class="filters" id="filters"><button class="filter active" data-cat="all">Wszystko</button><button class="filter" data-cat="rangi">Rangi</button><button class="filter" data-cat="klucze">Klucze</button><button class="filter" data-cat="vpln">VPLN</button><button class="filter" data-cat="dodatki">Dodatki</button></div>
 <div class="layout"><main><div class="products" id="products"></div></main><aside class="cart"><h2>Twój koszyk <span id="count" class="sub">(0)</span></h2><div class="sub">Twoje wybrane produkty</div><div id="cartItems"><div class="empty">Koszyk jest pusty.<br>Dodaj coś ze sklepu!</div></div><div class="coupon-row"><input id="couponCode" maxlength="32" placeholder="Kod rabatowy" aria-label="Kod rabatowy"><button id="applyCoupon" type="button">Użyj kodu</button></div><div id="couponMessage" class="coupon-message">Wpisz kod promocyjny, jeśli go masz.</div><div class="discount-line" id="discountLine" hidden><span>Rabat</span><span id="discountAmount">−0,00 zł</span></div><div class="total"><span>Razem</span><span id="total">0,00 zł</span></div><button class="checkout" id="checkout" disabled>Przejdź do zamówienia</button><p class="notice">Sklep nie pobiera płatności. Złożenie zamówienia przygotuje wiadomość do przekazania administracji na Discordzie.</p></aside></div>
-<section class="rank"><h2>🛡️ Bezpieczne zamówienia</h2><p>Każde zamówienie trafia do administracji Discorda. Płatność jest sprawdzana ręcznie, a produkt nie powinien być wydany przed potwierdzeniem.</p></section><section class="home-section" id="administracja"><div class="sectionhead"><div><span class="section-kicker">EKIPA SERWERA</span><h2>Administracja serwera</h2><p>Poznaj osoby tworzące i rozwijające FreeSky.</p></div><span class="section-pill">TEAM FREESKY</span></div><div class="recruit-banner"><div class="recruit-icon">✦</div><div class="recruit-copy"><span class="section-kicker">DOŁĄCZ DO EKIPY</span><h3>Szukamy administracji!</h3><p>Chcesz pomóc rozwijać FreeSky? Zgłoś swoją kandydaturę w tickecie na naszym Discordzie.</p></div><a class="primary-cta recruit-cta" href="https://dc.gg/freesky" target="_blank" rel="noopener noreferrer">Otwórz ticket ↗</a></div><div class="staff-grid"><article class="staff-card"><div class="staff-head"><img class="staff-avatar" src="https://mc-heads.net/avatar/Slodki3_W1sni3/96" alt="Główka Minecraft gracza Slodki3_W1sni3" loading="lazy"><div class="staff-info"><span class="staff-role">vCEO</span><h3>Slodki3_W1sni3</h3><p>Administracja FreeSky</p></div><span class="staff-crown" aria-label="Zarząd">♛</span></div><div class="staff-footer"><span class="staff-online"><i></i> Zespół FreeSky</span><a href="https://dc.gg/freesky" target="_blank" rel="noopener noreferrer">Discord ↗</a></div></article><article class="staff-card"><div class="staff-head"><img class="staff-avatar" src="https://mc-heads.net/avatar/ubiwa/96" alt="Główka Minecraft gracza ubiwa" loading="lazy"><div class="staff-info"><span class="staff-role">CEO</span><h3>ubiwa</h3><p>Właściciel FreeSky</p></div><span class="staff-crown" aria-label="Zarząd">♛</span></div><div class="staff-footer"><span class="staff-online"><i></i> Zespół FreeSky</span><a href="https://dc.gg/freesky" target="_blank" rel="noopener noreferrer">Discord ↗</a></div></article></div></section><footer class="foot"><span>© <span id="year"></span> FreeSky · Serwer Minecraft</span><span>FreeSky nie jest powiązany z Mojang ani Microsoft.</span><button type="button" class="terms-link" id="openTerms">Regulamin</button></footer></div><div id="toast" class="toast"></div><div class="terms-modal" id="termsModal" role="dialog" aria-modal="true" aria-labelledby="termsTitle"><section class="terms-box"><div class="terms-head"><div><span class="section-kicker">ZASADY SKLEPU</span><h2 id="termsTitle">Regulamin FreeSky</h2></div><button type="button" class="terms-close" id="closeTerms" aria-label="Zamknij regulamin">Zamknij ✕</button></div><p>Ostatnia aktualizacja: 11 października 2026 r.</p><h3>1. Informacje ogólne</h3><p>Sklep dotyczy wirtualnych rang, kluczy i waluty serwerowej FreeSky. Przed złożeniem zamówienia zapoznaj się z opisem produktu i ceną.</p><h3>2. Zamówienia i płatności</h3><ul><li>Wysłanie formularza jest zgłoszeniem zamówienia, a nie potwierdzeniem płatności ani zakupu.</li><li>Zamówienie wymaga sprawdzenia i potwierdzenia przez administrację. Nie wysyłaj danych haseł ani danych karty w formularzu lub na Discordzie.</li><li>Nie opłacaj zamówienia, dopóki administracja nie poda oficjalnej i jasnej instrukcji płatności.</li></ul><h3>3. Wirtualne przedmioty</h3><p>Rangi, klucze i VPLN są elementami wirtualnymi na serwerze. Ich dostępność i działanie zależą od funkcjonowania serwera oraz zasad gry. Nie są to fizyczne produkty.</p><h3>4. Poprawność danych</h3><p>Podaj poprawny nick Minecraft i sprawdź wybrane produkty przed wysłaniem zgłoszenia. Błędne dane mogą opóźnić obsługę zamówienia.</p><h3>5. Zachowanie na serwerze</h3><p>Użytkownicy powinni przestrzegać zasad serwera i poleceń administracji. Zakup rangi lub dodatku nie zwalnia z przestrzegania tych zasad.</p><h3>6. Kontakt i problemy</h3><p>W razie pytań lub problemów skontaktuj się z administracją przez <a href="https://dc.gg/freesky" target="_blank" rel="noopener noreferrer" style="color:var(--green)">oficjalny Discord FreeSky</a>.</p><h3>7. Zmiany regulaminu</h3><p>Regulamin może być aktualizowany. Przed złożeniem zamówienia sprawdź jego aktualną wersję. Ten tekst nie zastępuje obowiązujących przepisów prawa konsumenckiego.</p></section></div><div class="modal" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle"><form class="modalbox" id="checkoutForm"><h2 id="checkoutTitle">Dane zamówienia</h2><p class="sub">Uzupełnij nick i przygotuj zgłoszenie dla administracji.</p><label for="playerNick">Nick Minecraft</label><input id="playerNick" name="playerNick" maxlength="32" required pattern="[A-Za-z0-9_]{3,16}" placeholder="TwójNick" autocomplete="off"><label for="contactName">Kontakt na Discordzie (opcjonalnie)</label><input id="contactName" name="contactName" maxlength="80" placeholder="Nazwa użytkownika"><div class="modalactions"><button type="button" class="cancel" id="cancelCheckout">Anuluj</button><button type="submit" class="sendorder">Przygotuj zgłoszenie</button></div><p class="modalnote">To nie jest płatność ani potwierdzenie zakupu. Po skopiowaniu treści otworzy się Discord; wklej ją do odpowiedniego kanału/ticketa. Zamówienie wymaga potwierdzenia przez administrację.</p></form></div>
+<section class="rank"><h2>🛡️ Bezpieczne zamówienia</h2><p>Każde zamówienie trafia do administracji Discorda. Płatność jest sprawdzana ręcznie, a produkt nie powinien być wydany przed potwierdzeniem.</p></section><section class="discord-feature"><div class="discord-emoji">☁</div><div class="discord-copy"><span class="discord-kicker">WIDZIAŁEŚ NASZEGO DISCORDA?</span><h2>Na nim dowiesz się wszystkich<br>potrzebnych informacji!</h2><a href="https://dc.gg/freesky" target="_blank" rel="noopener noreferrer">● &nbsp; DOŁĄCZ TERAZ</a></div></section><section class="home-section" id="administracja"><div class="sectionhead"><div><span class="section-kicker">EKIPA SERWERA</span><h2>Administracja serwera</h2><p>Poznaj osoby tworzące i rozwijające FreeSky.</p></div><span class="section-pill">TEAM FREESKY</span></div><div class="recruit-banner"><div class="recruit-icon">✦</div><div class="recruit-copy"><span class="section-kicker">DOŁĄCZ DO EKIPY</span><h3>Szukamy administracji!</h3><p>Chcesz pomóc rozwijać FreeSky? Zgłoś swoją kandydaturę w tickecie na naszym Discordzie.</p></div><a class="primary-cta recruit-cta" href="https://dc.gg/freesky" target="_blank" rel="noopener noreferrer">Otwórz ticket ↗</a></div><div class="staff-grid"><article class="staff-card"><div class="staff-head"><img class="staff-avatar" src="https://mc-heads.net/avatar/Slodki3_W1sni3/96" alt="Główka Minecraft gracza Slodki3_W1sni3" loading="lazy"><div class="staff-info"><span class="staff-role">vCEO</span><h3>Slodki3_W1sni3</h3><p>Administracja FreeSky</p></div><span class="staff-crown" aria-label="Zarząd">♛</span></div><div class="staff-footer"><span class="staff-online"><i></i> Zespół FreeSky</span><a href="https://dc.gg/freesky" target="_blank" rel="noopener noreferrer">Discord ↗</a></div></article><article class="staff-card"><div class="staff-head"><img class="staff-avatar" src="https://mc-heads.net/avatar/ubiwa/96" alt="Główka Minecraft gracza ubiwa" loading="lazy"><div class="staff-info"><span class="staff-role">CEO</span><h3>ubiwa</h3><p>Właściciel FreeSky</p></div><span class="staff-crown" aria-label="Zarząd">♛</span></div><div class="staff-footer"><span class="staff-online"><i></i> Zespół FreeSky</span><a href="https://dc.gg/freesky" target="_blank" rel="noopener noreferrer">Discord ↗</a></div></article></div></section><footer class="foot"><span>© <span id="year"></span> FreeSky · Serwer Minecraft</span><span>FreeSky nie jest powiązany z Mojang ani Microsoft.</span><button type="button" class="terms-link" id="openTerms">Regulamin</button></footer></div><div id="toast" class="toast"></div><div class="terms-modal" id="termsModal" role="dialog" aria-modal="true" aria-labelledby="termsTitle"><section class="terms-box"><div class="terms-head"><div><span class="section-kicker">ZASADY SKLEPU</span><h2 id="termsTitle">Regulamin FreeSky</h2></div><button type="button" class="terms-close" id="closeTerms" aria-label="Zamknij regulamin">Zamknij ✕</button></div><p>Ostatnia aktualizacja: 11 października 2026 r.</p><h3>1. Informacje ogólne</h3><p>Sklep dotyczy wirtualnych rang, kluczy i waluty serwerowej FreeSky. Przed złożeniem zamówienia zapoznaj się z opisem produktu i ceną.</p><h3>2. Zamówienia i płatności</h3><ul><li>Wysłanie formularza jest zgłoszeniem zamówienia, a nie potwierdzeniem płatności ani zakupu.</li><li>Zamówienie wymaga sprawdzenia i potwierdzenia przez administrację. Nie wysyłaj danych haseł ani danych karty w formularzu lub na Discordzie.</li><li>Nie opłacaj zamówienia, dopóki administracja nie poda oficjalnej i jasnej instrukcji płatności.</li></ul><h3>3. Wirtualne przedmioty</h3><p>Rangi, klucze i VPLN są elementami wirtualnymi na serwerze. Ich dostępność i działanie zależą od funkcjonowania serwera oraz zasad gry. Nie są to fizyczne produkty.</p><h3>4. Poprawność danych</h3><p>Podaj poprawny nick Minecraft i sprawdź wybrane produkty przed wysłaniem zgłoszenia. Błędne dane mogą opóźnić obsługę zamówienia.</p><h3>5. Zachowanie na serwerze</h3><p>Użytkownicy powinni przestrzegać zasad serwera i poleceń administracji. Zakup rangi lub dodatku nie zwalnia z przestrzegania tych zasad.</p><h3>6. Kontakt i problemy</h3><p>W razie pytań lub problemów skontaktuj się z administracją przez <a href="https://dc.gg/freesky" target="_blank" rel="noopener noreferrer" style="color:var(--green)">oficjalny Discord FreeSky</a>.</p><h3>7. Zmiany regulaminu</h3><p>Regulamin może być aktualizowany. Przed złożeniem zamówienia sprawdź jego aktualną wersję. Ten tekst nie zastępuje obowiązujących przepisów prawa konsumenckiego.</p></section></div><div class="modal" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle"><form class="modalbox" id="checkoutForm"><h2 id="checkoutTitle">Dane zamówienia</h2><p class="sub">Uzupełnij nick i przygotuj zgłoszenie dla administracji.</p><label for="playerNick">Nick Minecraft</label><input id="playerNick" name="playerNick" maxlength="32" required pattern="[A-Za-z0-9_]{3,16}" placeholder="TwójNick" autocomplete="off"><label for="contactName">Kontakt na Discordzie (opcjonalnie)</label><input id="contactName" name="contactName" maxlength="80" placeholder="Nazwa użytkownika"><div class="modalactions"><button type="button" class="cancel" id="cancelCheckout">Anuluj</button><button type="submit" class="sendorder">Przygotuj zgłoszenie</button></div><p class="modalnote">To nie jest płatność ani potwierdzenie zakupu. Po skopiowaniu treści otworzy się Discord; wklej ją do odpowiedniego kanału/ticketa. Zamówienie wymaga potwierdzenia przez administrację.</p></form></div>
 <script>
 const products=[
 {id:1,name:"VIP",cat:"rangi",emoji:"✦",tag:"Ranga",desc:"Dodatkowe korzyści i wyróżnienie na serwerze.",price:19.99},
