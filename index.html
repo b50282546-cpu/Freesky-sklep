@@ -527,6 +527,29 @@ body:not([data-theme="light"]) .staff-footer {
   background-color: transparent;
 }
 
+
+/* Ciemny pasek przewijania po prawej stronie */
+html {
+  scrollbar-color: #34483d #090d12;
+  scrollbar-width: thin;
+}
+html::-webkit-scrollbar { width: 10px; }
+html::-webkit-scrollbar-track { background: #090d12; }
+html::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #42634d, #26372d);
+  border: 2px solid #090d12;
+  border-radius: 999px;
+}
+html::-webkit-scrollbar-thumb:hover { background: #62866b; }
+body[data-theme="light"] {
+  scrollbar-color: #b6c4bd #f3f6f8;
+}
+body[data-theme="light"]::-webkit-scrollbar-track { background: #f3f6f8; }
+body[data-theme="light"]::-webkit-scrollbar-thumb {
+  background: #b6c4bd;
+  border-color: #f3f6f8;
+}
+
 </style>
 </head>
 <body><div id="fsLoader" aria-label="Ładowanie strony" role="status"><div class="fs-loader-content"><div class="fs-loader-logo">FREE<span>SKY</span></div><div class="fs-loader-ring"></div><div class="fs-loader-caption">Ładowanie serwera...</div><div class="fs-loader-bar"></div></div></div><div id="particleField" aria-hidden="true"></div><div class="wrap">
