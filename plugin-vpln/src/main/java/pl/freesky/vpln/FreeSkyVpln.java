@@ -173,8 +173,10 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
                 "§8Wybierz produkt, aby kupić."));
         ConfigurationSection shop = getConfig().getConfigurationSection("shop");
         if (shop != null) {
-            int slot = 18;
+            int slot = 19;
             for (String id : shop.getKeys(false)) {
+                if (slot > 43) break;
+                if (slot % 9 == 0 || slot % 9 == 8) slot++;
                 if (slot > 43) break;
                 ConfigurationSection product = shop.getConfigurationSection(id);
                 if (product == null || !product.getBoolean("enabled", true)) continue;
@@ -402,12 +404,12 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
         if(slot>=9&&slot<=13){int idx=slot-9;if(idx<shopCategories.size())openAdmin(player,shopCategories.get(idx));return;}
         if(slot==49){player.closeInventory();return;}
         if(slot==45){ItemStack hand=player.getInventory().getItemInMainHand();if(hand==null||hand.getType().isAir()){player.sendMessage("§cWeź produkt do ręki.");return;}
-          String category=((AdminHolder)event.getView().getTopInventory().getHolder()).category;String id=hand.getType().name().toLowerCase(Locale.ROOT)+"_"+(System.currentTimeMillis()%100000);
+          String category=((AdminHolder)event.getView().getTopInventory().getHolder()).category;if(category.equals("Wszystkie"))category="Przedmioty";String id=hand.getType().name().toLowerCase(Locale.ROOT)+"_"+(System.currentTimeMillis()%100000);
           ConfigurationSection p=getConfig().createSection("shop."+id);p.set("enabled",true);p.set("name",hand.hasItemMeta()&&hand.getItemMeta().hasDisplayName()?LegacyComponentSerializer.legacySection().serialize(hand.getItemMeta().displayName()):hand.getType().name().replace('_',' '));p.set("material",hand.getType().name());p.set("amount",Math.max(1,hand.getAmount()));p.set("price",10);p.set("category",category);p.set("lore",List.of("Produkt dodany z panelu GUI."));p.set("commands",List.of());saveConfig();player.sendMessage("§aDodano produkt do kategorii "+category+" za 10 VPLN.");openAdmin(player,category);return;}
         if(slot<18||slot>=44||current==null||!current.hasItemMeta())return;
         String shown=LegacyComponentSerializer.legacySection().serialize(current.getItemMeta().displayName());ConfigurationSection shop=getConfig().getConfigurationSection("shop");if(shop==null)return;
         for(String id:shop.getKeys(false)){ConfigurationSection p=shop.getConfigurationSection(id);if(p==null||!shown.endsWith(p.getString("name",id)))continue;
-          if(event.isShiftClick()&&event.isRightClick()){getConfig().set("shop."+id,null);saveConfig();player.sendMessage("§cUsunięto produkt.");openAdmin(player,"Przedmioty");return;}
+          if(event.isShiftClick()&&event.isRightClick()){String cat=p.getString("category","Przedmioty");getConfig().set("shop."+id,null);saveConfig();player.sendMessage("§cUsunięto produkt.");openAdmin(player,cat);return;}
           if(event.isShiftClick()){p.set("enabled",!p.getBoolean("enabled",true));player.sendMessage("§eZmieniono dostępność produktu.");}
           else p.set("price",Math.max(0,p.getLong("price",0)+(event.isRightClick()?-10:10)));
           String cat=p.getString("category","Przedmioty");saveConfig();openAdmin(player,cat);return;
