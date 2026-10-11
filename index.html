@@ -226,7 +226,7 @@ document.getElementById("year").textContent=new Date().getFullYear();renderProdu
  function setTheme(theme){
    document.body.dataset.theme=theme;
    const light=theme==="light";
-   toggle.textContent=light?"☾ Ciemny":"☀ Jasny";
+   toggle.textContent=light?"☀ Jasny":"☾ Ciemny";
    toggle.setAttribute("aria-label",light?"Włącz ciemny motyw":"Włącz jasny motyw");
    document.querySelector('meta[name="theme-color"]')?.setAttribute("content",light?"#f3f6f8":"#090d12");
  }
