@@ -251,10 +251,19 @@ button:active,.primary-cta:active,.secondary-cta:active,.mode-card:active{transf
 @media(hover:none){.product:hover,.mode-card:hover,.staff-card:hover,.stat:hover,.player-tile:hover,.rank:hover,.cart:hover,.activity-panel:hover,.ranking-empty:hover,.recruit-banner:hover,.admin-section:hover{transform:none;box-shadow:none}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}#fsLoader{transition:none}}
 
+
+/* Nawigacja zakładkowa */
+.navlinks{gap:7px!important;margin-left:auto;margin-right:18px!important;flex-wrap:wrap}
+.navlinks .tab-link{padding:9px 12px;border:1px solid transparent;border-radius:9px;color:#b7c3ce;transition:background .2s ease,color .2s ease,border-color .2s ease,transform .2s ease}
+.navlinks .tab-link:hover,.navlinks .tab-link.active{color:var(--green);background:#7cf29a12;border-color:#7cf29a35}
+.tab-hidden{display:none!important}
+body[data-tab="home"] .hero,body[data-tab="home"] .player-banner{display:revert}
+@media(max-width:780px){.navlinks{order:3;width:100%;justify-content:center;margin:0!important;padding-top:8px}.navlinks .tab-link{padding:8px 9px;font-size:12px}}
+
 </style>
 </head>
 <body><div id="fsLoader" aria-label="Ładowanie strony" role="status"><div class="fs-loader-content"><div class="fs-loader-logo">FREE<span>SKY</span></div><div class="fs-loader-ring"></div><div class="fs-loader-caption">Ładowanie serwera...</div><div class="fs-loader-bar"></div></div></div><div id="particleField" aria-hidden="true"></div><div class="wrap">
-<header class="nav"><a class="brand" href="#" aria-label="FreeSky strona główna">FREE<span>SKY</span></a><nav class="navlinks"><a href="#tryby">Tryby</a><a href="#ostatnie">Ostatnie zakupy</a><a href="#ranking">Topka</a><a href="#sklep">Sklep</a></nav><div class="server"><span class="iplabel">IP:</span> <strong id="ipText">free1.gemhost.pl:31962</strong><button id="copyIp">Kopiuj IP</button><button id="themeToggle" class="theme-toggle" type="button" aria-label="Włącz jasny motyw" title="Zmień motyw">☀ Jasny</button></div></header>
+<header class="nav"><a class="brand" href="#" aria-label="FreeSky strona główna">FREE<span>SKY</span></a><nav class="navlinks" aria-label="Główne zakładki"><a href="#home" data-tab="home" class="tab-link active">Główna</a><a href="#tryby" data-tab="tryby" class="tab-link">Tryby</a><a href="#sklep" data-tab="sklep" class="tab-link">Sklep</a><a href="#community" data-tab="community" class="tab-link">Zakupy i topka</a><a href="#administracja" data-tab="administracja" class="tab-link">Administracja</a></nav><div class="server"><span class="iplabel">IP:</span> <strong id="ipText">free1.gemhost.pl:31962</strong><button id="copyIp">Kopiuj IP</button><button id="themeToggle" class="theme-toggle" type="button" aria-label="Włącz jasny motyw" title="Zmień motyw">☀ Jasny</button></div></header>
 <section class="hero"><div class="hero-copy"><span class="eyebrow"><span class="eyedot"></span> OFICJALNY SERWER MINECRAFT</span><h1>Twój ulubiony<br><span>serwer Minecraft!</span></h1><p>Dołącz do społeczności FreeSky i przeżyj niezapomniane przygody. Skopiuj IP serwera i wskakuj do gry!</p><div class="hero-actions"><button class="primary-cta" id="heroCopyIp">▶ SKOPIUJ IP SERWERA</button><a class="secondary-cta" href="https://dc.gg/freesky" target="_blank" rel="noopener noreferrer">DOŁĄCZ NA DISCORDA</a></div><div class="status"><span class="dot"></span> Java Edition • IP: free1.gemhost.pl:31962</div></div><div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="block-scene"><div class="mc-block block-grass"><i></i></div><div class="mc-block block-stone"></div><div class="mc-block block-diamond">◆</div></div><div class="floating-label label-one">✦ MINECRAFT</div><div class="floating-label label-two">✧ FREESKY</div></div></section>
 
 <section class="player-banner" aria-label="Status serwera"><div class="player-tile"><div class="big">●</div><div><strong id="playerCount">Sprawdzanie…</strong><small id="serverStatus">Status serwera</small></div></div><div class="player-tile"><div class="big">↗</div><div><strong id="lastDonor">Brak danych</strong><small>Ostatnie potwierdzone doładowanie</small></div></div><div class="player-tile"><div class="big">♛</div><div><strong id="topDonor">Brak danych</strong><small id="topDonorAmount">Topka wydanych PLN</small></div></div></section>
@@ -329,6 +338,40 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")termsModal.classList
 })();
 
 document.getElementById("year").textContent=new Date().getFullYear();renderProducts();renderCart();
+
+/* Zakładki — każda sekcja ma własny widok */
+(function(){
+ const tabs=[...document.querySelectorAll(".tab-link")];
+ const groups={
+  home:[".hero",".player-banner"],
+  tryby:["#tryby"],
+  sklep:["#sklep","#filters",".layout",".rank"],
+  community:["#ostatnie","#ranking"],
+  administracja:["#administracja"]
+ };
+ const allSelectors=[...new Set(Object.values(groups).flat())];
+ const nodes=allSelectors.map(sel=>[sel,document.querySelector(sel)]).filter(x=>x[1]);
+ function setTab(name){
+  if(!groups[name])name="home";
+  document.body.dataset.tab=name;
+  nodes.forEach(([sel,node])=>node.classList.toggle("tab-hidden",!groups[name].includes(sel)));
+  tabs.forEach(a=>{const active=a.dataset.tab===name;a.classList.toggle("active",active);if(active)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current");});
+  document.body.classList.remove("store-only");
+  const hash=name==="home"?"#home":name==="community"?"#community":"#"+name;
+  if(location.hash!==hash)history.replaceState(null,"",hash);
+  window.scrollTo({top:0,behavior:"smooth"});
+ }
+ tabs.forEach(a=>a.addEventListener("click",e=>{e.preventDefault();setTab(a.dataset.tab);}));
+ const brand=document.querySelector(".brand");
+ if(brand)brand.addEventListener("click",e=>{e.preventDefault();setTab("home");});
+ const sky=document.getElementById("openSkyPvP");
+ if(sky){sky.onclick=()=>setTab("sklep");}
+ const back=document.getElementById("backHome");
+ if(back){back.onclick=()=>setTab("home");}
+ const initial=location.hash==="#sklep"?"sklep":location.hash==="#tryby"?"tryby":location.hash==="#community"?"community":location.hash==="#administracja"?"administracja":"home";
+ setTab(initial);
+})();
+
 
 /* Ekran ładowania i wejściowa animacja strony */
 (function(){const loader=document.getElementById("fsLoader");if(!loader)return;const hide=()=>{document.body.classList.add("fs-ready");loader.classList.add("fs-loader-hidden");setTimeout(()=>loader.remove(),500)};if(document.readyState==="complete")setTimeout(hide,700);else window.addEventListener("load",()=>setTimeout(hide,450),{once:true});setTimeout(hide,2200);})();
