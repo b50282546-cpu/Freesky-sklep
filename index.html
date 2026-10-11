@@ -31,7 +31,7 @@ const products=[
 {id:10,name:"Mystery box",cat:"dodatki",emoji:"▣",tag:"Niespodzianka",desc:"Paczka z niespodzianką — szczegóły do ustalenia.",price:12.99}
 ];
 // Wklej tutaj adres wdrożonego Cloudflare Workera (instrukcja: DISCORD-INTEGRATION.md).
-const ORDER_API_URL = "";
+const ORDER_API_URL = "https://broken-art-3c11.b50282546.workers.dev/orders";
 let cart=[];let category="all";
 const money=n=>n.toLocaleString("pl-PL",{style:"currency",currency:"PLN"});
 function renderProducts(){document.getElementById("products").innerHTML=products.filter(p=>category==="all"||p.cat===category).map(p=>'<article class="product"><div class="emoji">'+p.emoji+'</div><div class="tag">'+p.tag+'</div><h3>'+p.name+'</h3><p>'+p.desc+'</p><div class="buyrow"><span class="price">'+money(p.price)+'</span><button class="buy" data-add="'+p.id+'">Dodaj +</button></div></article>').join("");}
