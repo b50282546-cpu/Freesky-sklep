@@ -189,8 +189,16 @@ export default {
     }
     if (total > 10000000) return json({ error: "Kwota przekracza limit." }, 400, origin);
 
+    // Kupony są sprawdzane również po stronie serwera — dane z przeglądarki nie są zaufane.
+    const couponCode = clean(body.coupon, 32).toUpperCase();
+    const coupons = { FREESKY10: 10, SKYPVP10: 10, START5: 5 };
+    const couponPercent = couponCode ? (coupons[couponCode] || 0) : 0;
+    if (couponCode && !couponPercent) return json({ error: "Nieprawidłowy kod rabatowy." }, 400, origin);
+    const discount = Math.round(total * couponPercent / 100);
+    const finalTotal = Math.max(0, total - discount);
+
     const orderId = crypto.randomUUID().slice(0, 8).toUpperCase();
-    const order = { orderId, nick, discord, items, totalCents: total, status: "pending", createdAt: new Date().toISOString() };
+    const order = { orderId, nick, discord, items, subtotalCents: total, coupon: couponCode || null, couponPercent, discountCents: discount, totalCents: finalTotal, status: "pending", createdAt: new Date().toISOString() };
     const payload = {
       embeds: [{
         title: "🛒 Nowe zgłoszenie zamówienia",
@@ -200,7 +208,9 @@ export default {
           { name: "Nick Minecraft", value: nick, inline: true },
           { name: "Kontakt Discord", value: discord, inline: true },
           { name: "Produkty", value: itemLines.join("\n").slice(0, 1024) },
-          { name: "Suma koszyka", value: (total / 100).toFixed(2) + " zł", inline: true },\n          ...(couponPercent ? [{ name: "Kod rabatowy", value: couponCode + " (-" + couponPercent + "%)", inline: true }, { name: "Rabat", value: (discount / 100).toFixed(2) + " zł", inline: true }] : []),\n          { name: "Do zapłaty po rabacie", value: (finalTotal / 100).toFixed(2) + " zł", inline: true },
+          { name: "Suma koszyka przed rabatem", value: (total / 100).toFixed(2) + " zł", inline: true },
+          ...(couponPercent ? [{ name: "Kod rabatowy", value: couponCode + " (-" + couponPercent + "%)", inline: true }, { name: "Rabat", value: (discount / 100).toFixed(2) + " zł", inline: true }] : []),
+          { name: "Do zapłaty po rabacie", value: (finalTotal / 100).toFixed(2) + " zł", inline: true },
           { name: "Status", value: statusLabel("pending") }
         ],
         footer: { text: "FreeSky • zgłoszenie sklepu, nie potwierdzenie płatności" },
