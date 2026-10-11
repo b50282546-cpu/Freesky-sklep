@@ -47,12 +47,15 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
     private NamespacedKey productKey;
     private static final int GUI_SIZE = 54;
     private final HttpClient httpClient = HttpClient.newHttpClient();
-    private final List<String> shopCategories = List.of("Wszystkie", "Rangi", "Klucze", "Przedmioty", "Inne");
+    private final List<String> shopCategories = new ArrayList<>(List.of("Wszystkie", "Rangi", "Klucze", "Przedmioty", "Inne"));
     private static final long MAX_MULTIPLIER_SECONDS = 30L * 24L * 60L * 60L;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        List<String> configuredCategories=getConfig().getStringList("shop-categories");
+        if(!configuredCategories.isEmpty()){shopCategories.clear();if(!configuredCategories.contains("Wszystkie"))shopCategories.add("Wszystkie");for(String cat:configuredCategories)if(!cat.equals("Wszystkie")&&!cat.isBlank()&&!shopCategories.contains(cat))shopCategories.add(cat);}
+        else getConfig().set("shop-categories",shopCategories);
         productKey = new NamespacedKey(this, "shop_product");
         balancesFile = new File(getDataFolder(), "balances.yml");
         loadBalances();
@@ -397,12 +400,13 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
         ConfigurationSection shop=getConfig().getConfigurationSection("shop"); int slot=19;
         if(shop!=null) for(String id:shop.getKeys(false)){ConfigurationSection p=shop.getConfigurationSection(id);if(p==null||!p.getString("category","Przedmioty").equals(category))continue;if(slot>=44)break;if(slot%9==0||slot%9==8)slot++;if(slot>=44)break;Material mat=Material.matchMaterial(p.getString("material","EMERALD"));if(mat==null||mat.isAir())mat=Material.EMERALD;
           inv.setItem(slot,named(mat,(p.getBoolean("enabled",true)?"§a":"§c")+p.getString("name",id),"§7Cena: §e"+p.getLong("price",0)+" VPLN","§eLewy klik: +10 VPLN","§ePrawy klik: -10 VPLN","§eShift + klik: włącz/wyłącz","§cShift + prawy: usuń"));slot++;}
-        inv.setItem(45,named(Material.HOPPER,"§aDodaj produkt z ręki","§7Weź przedmiot do ręki i kliknij tutaj.","§7Cena początkowa: 10 VPLN."));inv.setItem(49,named(Material.BARRIER,"§cZamknij"));player.openInventory(inv);
+        inv.setItem(45,named(Material.HOPPER,"§aDodaj produkt z ręki","§7Weź przedmiot do ręki i kliknij tutaj.","§7Cena początkowa: 10 VPLN."));inv.setItem(47,named(Material.BOOK,"§bDodaj zakładkę","§7Utworzy nową kategorię sklepu."));inv.setItem(49,named(Material.BARRIER,"§cZamknij"));player.openInventory(inv);
     }
     private void handleAdminClick(Player player,InventoryClickEvent event) {
         if(!player.hasPermission("freeskyvpln.admin")){player.closeInventory();return;} int slot=event.getRawSlot(); ItemStack current=event.getCurrentItem();
         if(slot>=9&&slot<=13){int idx=slot-9;if(idx<shopCategories.size())openAdmin(player,shopCategories.get(idx));return;}
         if(slot==49){player.closeInventory();return;}
+        if(slot==47){String category="Zakładka "+(shopCategories.size()-3);while(shopCategories.contains(category))category="Zakładka "+(shopCategories.size()+1);shopCategories.add(category);getConfig().set("shop-categories",shopCategories);saveConfig();player.sendMessage("§aUtworzono kategorię §e"+category+"§a.");openAdmin(player,category);return;}
         if(slot==45){ItemStack hand=player.getInventory().getItemInMainHand();if(hand==null||hand.getType().isAir()){player.sendMessage("§cWeź produkt do ręki.");return;}
           String category=((AdminHolder)event.getView().getTopInventory().getHolder()).category;if(category.equals("Wszystkie"))category="Przedmioty";String id=hand.getType().name().toLowerCase(Locale.ROOT)+"_"+(System.currentTimeMillis()%100000);
           ConfigurationSection p=getConfig().createSection("shop."+id);p.set("enabled",true);p.set("name",hand.hasItemMeta()&&hand.getItemMeta().hasDisplayName()?LegacyComponentSerializer.legacySection().serialize(hand.getItemMeta().displayName()):hand.getType().name().replace('_',' '));p.set("material",hand.getType().name());p.set("amount",Math.max(1,hand.getAmount()));p.set("price",10);p.set("category",category);p.set("lore",List.of("Produkt dodany z panelu GUI."));p.set("commands",List.of());saveConfig();player.sendMessage("§aDodano produkt do kategorii "+category+" za 10 VPLN.");openAdmin(player,category);return;}
