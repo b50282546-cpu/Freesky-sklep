@@ -21,8 +21,8 @@ function json(body, status = 200, origin = "") {
 function clean(value, max = 100) {
   return String(value ?? "").replace(/[<>\u0000-\u001f]/g, "").trim().slice(0, max);
 }
-function hexBytes(hex) {
-  if (!/^[0-9a-f]{64}$/i.test(hex || "")) throw new Error("Invalid Discord public key");
+function hexBytes(hex, expectedLength) {
+  if (!new RegExp("^[0-9a-f]{" + expectedLength + "}$", "i").test(hex || "")) throw new Error("Invalid hex input");
   return Uint8Array.from(hex.match(/.{2}/g), b => parseInt(b, 16));
 }
 function statusLabel(status) {
@@ -51,8 +51,8 @@ async function verifyDiscordRequest(request, rawBody, env) {
   const timestamp = request.headers.get("X-Signature-Timestamp") || "";
   if (!signature || !timestamp || !env.DISCORD_PUBLIC_KEY) return false;
   try {
-    const key = await crypto.subtle.importKey("raw", hexBytes(env.DISCORD_PUBLIC_KEY), { name: "Ed25519" }, false, ["verify"]);
-    return await crypto.subtle.verify("Ed25519", key, hexBytes(signature), new TextEncoder().encode(timestamp + rawBody));
+    const key = await crypto.subtle.importKey("raw", hexBytes(env.DISCORD_PUBLIC_KEY, 64), { name: "Ed25519" }, false, ["verify"]);
+    return await crypto.subtle.verify("Ed25519", key, hexBytes(signature, 128), new TextEncoder().encode(timestamp + rawBody));
   } catch {
     return false;
   }
