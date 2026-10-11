@@ -1,0 +1,80 @@
+# FreeSky VPLN - ustawienia sklepu i ogłoszeń.
+# Produkty edytuj w sekcji shop. Cena jest w VPLN.
+# Jeśli produkt ma komendy w "commands", zostaną wykonane jako konsola po zakupie.
+# Dostępne placeholdery komend: %player%, %uuid%, %amount%.
+# Produkty komendowe można podłączyć do pluginu rang/kluczy; sprawdź komendy danego pluginu.
+
+announcements:
+  title: "&a&lZAKUP NA FREESKY!"
+  subtitle: "&f%player% &7kupił &a%product% &7za &e%price% VPLN"
+
+# Mnożnik dotyczy nagród wydawanych przez /vpln earn i publiczną metodę deposit(..., true).
+# ends-at to data końca w milisekundach Unix; nie zmieniaj ręcznie w trakcie eventu.
+multiplier:
+  value: 1.0
+  ends-at: 0
+
+shop:
+  emeralds:
+    enabled: true
+    name: "Pakiet szmaragdów"
+    material: EMERALD
+    amount: 16
+    price: 80
+    lore:
+      - "16 szmaragdów do wykorzystania w grze."
+    commands: []
+  diamonds:
+    enabled: true
+    name: "Pakiet diamentów"
+    material: DIAMOND
+    amount: 8
+    price: 160
+    lore:
+      - "8 diamentów."
+    commands: []
+  golden_apples:
+    enabled: true
+    name: "Złote jabłka"
+    material: GOLDEN_APPLE
+    amount: 4
+    price: 120
+    lore:
+      - "4 złote jabłka."
+    commands: []
+  experience:
+    enabled: true
+    name: "Butelki doświadczenia"
+    material: EXPERIENCE_BOTTLE
+    amount: 16
+    price: 100
+    lore:
+      - "16 butelek doświadczenia."
+    commands: []
+  iron_blocks:
+    enabled: true
+    name: "Bloki żelaza"
+    material: IRON_BLOCK
+    amount: 8
+    price: 90
+    lore:
+      - "8 bloków żelaza."
+    commands: []
+  name_tags:
+    enabled: true
+    name: "Znaczniki"
+    material: NAME_TAG
+    amount: 2
+    price: 140
+    lore:
+      - "2 znaczniki do wykorzystania w grze."
+    commands: []
+  rockets:
+    enabled: true
+    name: "Fajerwerki"
+    material: FIREWORK_ROCKET
+    amount: 16
+    price: 60
+    lore:
+      - "16 fajerwerków."
+    commands: []
