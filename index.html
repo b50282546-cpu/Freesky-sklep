@@ -473,6 +473,60 @@ body:not([data-theme="light"]) #ranking .staff-footer{
   border-top-color:#29372f!important;
 }
 
+
+/* DARK MODE FIX: remove jasne/biale powierzchnie bez ingerencji w obrazki i tekst */
+body:not([data-theme="light"]) *:not(img):not(svg):not(video):not(canvas):not(iframe) {
+  background-color: transparent;
+}
+body:not([data-theme="light"]) .product,
+body:not([data-theme="light"]) .cart,
+body:not([data-theme="light"]) .rank,
+body:not([data-theme="light"]) .modalbox,
+body:not([data-theme="light"]) .staff-card,
+body:not([data-theme="light"]) .activity-panel,
+body:not([data-theme="light"]) .ranking-empty,
+body:not([data-theme="light"]) .player-tile,
+body:not([data-theme="light"]) .stat,
+body:not([data-theme="light"]) .mode-card,
+body:not([data-theme="light"]) .admin-section,
+body:not([data-theme="light"]) .recruit-banner,
+body:not([data-theme="light"]) .hero-art,
+body:not([data-theme="light"]) .toast {
+  background-color: #101820;
+}
+body:not([data-theme="light"]) input,
+body:not([data-theme="light"]) textarea,
+body:not([data-theme="light"]) select,
+body:not([data-theme="light"]) .coupon-row input,
+body:not([data-theme="light"]) .modalbox input {
+  background: #080d12 !important;
+  color: var(--white) !important;
+  border-color: #2a3742 !important;
+}
+body:not([data-theme="light"]) button:not(.buy):not(.sendorder):not(.primary-cta),
+body:not([data-theme="light"]) .filter,
+body:not([data-theme="light"]) .theme-toggle,
+body:not([data-theme="light"]) .secondary-cta,
+body:not([data-theme="light"]) .back-home,
+body:not([data-theme="light"]) .server button,
+body:not([data-theme="light"]) .qty button,
+body:not([data-theme="light"]) .coupon-row button {
+  background-color: #151e27 !important;
+  color: var(--white);
+  border-color: #2a3742;
+}
+body:not([data-theme="light"]) .buy,
+body:not([data-theme="light"]) .primary-cta,
+body:not([data-theme="light"]) .sendorder {
+  background-color: var(--green) !important;
+  color: #07100a !important;
+}
+body:not([data-theme="light"]) .nav,
+body:not([data-theme="light"]) .foot,
+body:not([data-theme="light"]) .staff-footer {
+  background-color: transparent;
+}
+
 </style>
 </head>
 <body><div id="fsLoader" aria-label="Ładowanie strony" role="status"><div class="fs-loader-content"><div class="fs-loader-logo">FREE<span>SKY</span></div><div class="fs-loader-ring"></div><div class="fs-loader-caption">Ładowanie serwera...</div><div class="fs-loader-bar"></div></div></div><div id="particleField" aria-hidden="true"></div><div class="wrap">
