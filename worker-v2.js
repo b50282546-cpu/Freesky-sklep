@@ -148,10 +148,12 @@ export default {
         orders.sort((a,b) => String(b.updatedAt || b.createdAt).localeCompare(String(a.updatedAt || a.createdAt)));
         const sums = {};
         for (const order of orders) sums[order.nick] = (sums[order.nick] || 0) + Number(order.totalCents || 0);
-        const topEntry = Object.entries(sums).sort((a,b) => b[1]-a[1])[0];
+        const sortedTop = Object.entries(sums).sort((a,b) => b[1]-a[1]);
+        const topEntry = sortedTop[0];
         return json({
           last: orders[0] ? { nick: orders[0].nick, amount: orders[0].totalCents || 0 } : null,
           top: topEntry ? { nick: topEntry[0], amount: topEntry[1] } : null,
+          ranking: sortedTop.slice(0, 3).map(([nick, amount]) => ({ nick, amount })),
           recent: orders.slice(0, 30).map(order => ({
             nick: order.nick,
             amount: order.totalCents || 0,
