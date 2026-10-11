@@ -26,6 +26,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +46,8 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
     private YamlConfiguration balances;
     private NamespacedKey productKey;
     private static final int GUI_SIZE = 54;
+    private final HttpClient httpClient = HttpClient.newHttpClient();
+    private final List<String> shopCategories = List.of("Wszystkie", "Rangi", "Klucze", "Przedmioty", "Inne");
     private static final long MAX_MULTIPLIER_SECONDS = 30L * 24L * 60L * 60L;
 
     @Override
@@ -55,6 +62,7 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
         PluginCommand wallet = getCommand("portfel");
         if (wallet != null) wallet.setExecutor(this);
         getLogger().info("FreeSky VPLN uruchomiony. Salda: " + balances.getKeys(false).size());
+        if (getConfig().getBoolean("web-bridge.enabled", false)) Bukkit.getScheduler().runTaskTimerAsynchronously(this, this::pollWebDeliveries, 40L, 100L);
     }
 
     @Override
@@ -148,7 +156,9 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
         return Duration.ofSeconds(total);
     }
 
-    private void openWallet(Player player) {
+    private void openWallet(Player player) { openWallet(player, "Wszystkie"); }
+
+    private void openWallet(Player player, String category) {
         WalletHolder holder = new WalletHolder();
         Inventory inv = Bukkit.createInventory(holder, GUI_SIZE, LegacyComponentSerializer.legacySection().deserialize("§2§lFreeSky §8» §aPortfel"));
         holder.inventory = inv;
@@ -156,17 +166,20 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
         for (int i = 0; i < GUI_SIZE; i++) {
             if (i < 9 || i >= 45 || i % 9 == 0 || i % 9 == 8) inv.setItem(i, border);
         }
+        for (int i=0;i<shopCategories.size();i++) { String cat=shopCategories.get(i); inv.setItem(9+i,named(cat.equals(category)?Material.LIME_DYE:Material.PAPER,(cat.equals(category)?"§a§l":"§f")+cat,"§7Kliknij, aby wyświetlić kategorię.")); }
         inv.setItem(4, named(Material.EMERALD, "§a§lTwój portfel",
                 "§7Saldo: §a" + balance(player.getUniqueId()) + " VPLN",
                 "§7Mnożnik: §e" + multiplierLabel(),
                 "§8Wybierz produkt, aby kupić."));
         ConfigurationSection shop = getConfig().getConfigurationSection("shop");
         if (shop != null) {
-            int slot = 10;
+            int slot = 18;
             for (String id : shop.getKeys(false)) {
                 if (slot > 43) break;
                 ConfigurationSection product = shop.getConfigurationSection(id);
                 if (product == null || !product.getBoolean("enabled", true)) continue;
+                String productCategory=product.getString("category","Przedmioty");
+                if (!category.equals("Wszystkie") && !category.equals(productCategory)) continue;
                 Material material = Material.matchMaterial(product.getString("material", "EMERALD"));
                 if (material == null || material.isAir()) material = Material.EMERALD;
                 long price = Math.max(0L, product.getLong("price", 0L));
@@ -215,10 +228,12 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
-        if (!(event.getView().getTopInventory().getHolder() instanceof WalletHolder)) return;
+        if (!(event.getView().getTopInventory().getHolder() instanceof WalletHolder) && !(event.getView().getTopInventory().getHolder() instanceof AdminHolder)) return;
         event.setCancelled(true);
         if (!(event.getWhoClicked() instanceof Player player)) return;
         if (event.getClickedInventory() == null || event.getClickedInventory() != event.getView().getTopInventory()) return;
+        if (event.getView().getTopInventory().getHolder() instanceof AdminHolder) { handleAdminClick(player,event); return; }
+        if (event.getRawSlot() >= 9 && event.getRawSlot() <= 13) { int idx=event.getRawSlot()-9; if(idx<shopCategories.size()) { openWallet(player,shopCategories.get(idx)); return; } }
         if (event.getRawSlot() == 49) { player.closeInventory(); return; }
         ItemStack clicked = event.getCurrentItem();
         if (clicked == null || !clicked.hasItemMeta()) return;
@@ -278,7 +293,7 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
-        if (event.getView().getTopInventory().getHolder() instanceof WalletHolder) event.setCancelled(true);
+        if (event.getView().getTopInventory().getHolder() instanceof WalletHolder || event.getView().getTopInventory().getHolder() instanceof AdminHolder) event.setCancelled(true);
     }
 
     @Override
@@ -288,7 +303,9 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
             openWallet(player);
             return true;
         }
+        if (args.length == 1 && args[0].equalsIgnoreCase("gui")) { if(!sender.hasPermission("freeskyvpln.admin")) { sender.sendMessage("§cBrak uprawnień."); return true; } if(!(sender instanceof Player admin)) { sender.sendMessage("Dostępne w grze."); return true; } openAdmin(admin,"Przedmioty"); return true; }
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
+            sender.sendMessage("§a/vpln gui §7- panel zarządzania sklepem");
             sender.sendMessage("§a/vpln balance [gracz]");
             sender.sendMessage("§a/vpln give <gracz> <kwota> §7- dodaj VPLN (bez mnożnika)");
             sender.sendMessage("§a/vpln earn <gracz> <kwota> §7- nagroda VPLN (z mnożnikiem)");
@@ -367,6 +384,52 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
         sender.sendMessage("§cNieznana podkomenda. Użyj /vpln help.");
         return true;
     }
+
+
+    private void openAdmin(Player player,String category) {
+        AdminHolder holder=new AdminHolder();
+        Inventory inv=Bukkit.createInventory(holder,GUI_SIZE,LegacyComponentSerializer.legacySection().deserialize("§2§lFreeSky §8» §cEdytor sklepu")); holder.inventory=inv;
+        ItemStack border=named(Material.GRAY_STAINED_GLASS_PANE,"§r");
+        for(int i=0;i<GUI_SIZE;i++) if(i<9||i>=45||i%9==0||i%9==8) inv.setItem(i,border);
+        for(int i=0;i<shopCategories.size();i++){String cat=shopCategories.get(i);inv.setItem(9+i,named(cat.equals(category)?Material.LIME_DYE:Material.PAPER,(cat.equals(category)?"§a§l":"§f")+cat,"§7Kliknij kategorię."));}
+        ConfigurationSection shop=getConfig().getConfigurationSection("shop"); int slot=18;
+        if(shop!=null) for(String id:shop.getKeys(false)){ConfigurationSection p=shop.getConfigurationSection(id);if(p==null||!p.getString("category","Przedmioty").equals(category))continue;if(slot>=44)break;Material mat=Material.matchMaterial(p.getString("material","EMERALD"));if(mat==null||mat.isAir())mat=Material.EMERALD;
+          inv.setItem(slot++,named(mat,(p.getBoolean("enabled",true)?"§a":"§c")+p.getString("name",id),"§7Cena: §e"+p.getLong("price",0)+" VPLN","§eLewy klik: +10 VPLN","§ePrawy klik: -10 VPLN","§eShift + klik: włącz/wyłącz","§cShift + prawy: usuń"));}
+        inv.setItem(45,named(Material.HOPPER,"§aDodaj produkt z ręki","§7Weź przedmiot do ręki i kliknij tutaj.","§7Cena początkowa: 10 VPLN."));inv.setItem(49,named(Material.BARRIER,"§cZamknij"));player.openInventory(inv);
+    }
+    private void handleAdminClick(Player player,InventoryClickEvent event) {
+        if(!player.hasPermission("freeskyvpln.admin")){player.closeInventory();return;} int slot=event.getRawSlot(); ItemStack current=event.getCurrentItem();
+        if(slot>=9&&slot<=13){int idx=slot-9;if(idx<shopCategories.size())openAdmin(player,shopCategories.get(idx));return;}
+        if(slot==49){player.closeInventory();return;}
+        if(slot==45){ItemStack hand=player.getInventory().getItemInMainHand();if(hand==null||hand.getType().isAir()){player.sendMessage("§cWeź produkt do ręki.");return;}
+          String category="Przedmioty";String id=hand.getType().name().toLowerCase(Locale.ROOT)+"_"+(System.currentTimeMillis()%100000);
+          ConfigurationSection p=getConfig().createSection("shop."+id);p.set("enabled",true);p.set("name",hand.hasItemMeta()&&hand.getItemMeta().hasDisplayName()?LegacyComponentSerializer.legacySection().serialize(hand.getItemMeta().displayName()):hand.getType().name().replace('_',' '));p.set("material",hand.getType().name());p.set("amount",Math.max(1,hand.getAmount()));p.set("price",10);p.set("category",category);p.set("lore",List.of("Produkt dodany z panelu GUI."));p.set("commands",List.of());saveConfig();player.sendMessage("§aDodano produkt do kategorii Przedmioty za 10 VPLN.");openAdmin(player,category);return;}
+        if(slot<18||slot>=44||current==null||!current.hasItemMeta())return;
+        String shown=LegacyComponentSerializer.legacySection().serialize(current.getItemMeta().displayName());ConfigurationSection shop=getConfig().getConfigurationSection("shop");if(shop==null)return;
+        for(String id:shop.getKeys(false)){ConfigurationSection p=shop.getConfigurationSection(id);if(p==null||!shown.endsWith(p.getString("name",id)))continue;
+          if(event.isShiftClick()&&event.isRightClick()){getConfig().set("shop."+id,null);saveConfig();player.sendMessage("§cUsunięto produkt.");openAdmin(player,"Przedmioty");return;}
+          if(event.isShiftClick()){p.set("enabled",!p.getBoolean("enabled",true));player.sendMessage("§eZmieniono dostępność produktu.");}
+          else p.set("price",Math.max(0,p.getLong("price",0)+(event.isRightClick()?-10:10)));
+          String cat=p.getString("category","Przedmioty");saveConfig();openAdmin(player,cat);return;
+        }
+    }
+    private void pollWebDeliveries(){
+      String base=getConfig().getString("web-bridge.url",""),secret=getConfig().getString("web-bridge.secret","");
+      if(base.isBlank()||secret.isBlank()||secret.startsWith("USTAW_"))return;
+      try{HttpRequest req=HttpRequest.newBuilder(URI.create(base.replaceAll("/+$","")+"/deliveries")).timeout(Duration.ofSeconds(8)).header("Authorization","Bearer "+secret).GET().build();
+        HttpResponse<String> res=httpClient.send(req,HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));if(res.statusCode()!=200||res.body().isBlank())return;
+        for(String line:res.body().split("\\R")){String[] p=line.trim().split("\\|");if(p.length!=3||!p[0].matches("[A-F0-9]{8}")||!p[1].matches("[A-Za-z0-9_]{3,16}"))continue;long amount;try{amount=Long.parseLong(p[2]);}catch(NumberFormatException e){continue;}if(amount<1||amount>1000000)continue;String id=p[0],nick=p[1];Bukkit.getScheduler().runTask(this,()->deliverWebOrder(id,nick,amount,base,secret));}
+      }catch(Exception e){getLogger().fine("Bridge sklepu chwilowo niedostępny: "+e.getMessage());}
+    }
+    private void deliverWebOrder(String orderId,String nick,long amount,String base,String secret){
+      if(balances.getStringList("web-deliveries").contains(orderId)){acknowledgeDelivery(orderId,base,secret);return;}
+      UUID uuid=Bukkit.getOfflinePlayer(nick).getUniqueId();List<String> done=new ArrayList<>(balances.getStringList("web-deliveries"));done.add(orderId);balances.set("web-deliveries",done);balances.set(uuid.toString(),Math.max(0L,balance(uuid))+amount);saveBalances();
+      Player online=Bukkit.getPlayer(uuid);String title=getConfig().getString("web-bridge.title","&a&lZAKUP POTWIERDZONY!");String subtitle=getConfig().getString("web-bridge.subtitle","&f%player% &7otrzymał &e%amount% VPLN").replace("%player%",nick).replace("%amount%",Long.toString(amount));
+      for(Player p:Bukkit.getOnlinePlayers())p.showTitle(Title.title(LegacyComponentSerializer.legacyAmpersand().deserialize(title),LegacyComponentSerializer.legacyAmpersand().deserialize(subtitle)));
+      Bukkit.broadcastMessage("§8[§aFreeSky§8] §f"+nick+" §7otrzymał §e"+amount+" VPLN §7za potwierdzone zamówienie §8("+orderId+")§7.");if(online!=null)online.sendMessage("§aOtrzymujesz §e"+amount+" VPLN §aza potwierdzone zamówienie sklepu!");acknowledgeDelivery(orderId,base,secret);
+    }
+    private void acknowledgeDelivery(String id,String base,String secret){Bukkit.getScheduler().runTaskAsynchronously(this,()->{try{HttpRequest req=HttpRequest.newBuilder(URI.create(base.replaceAll("/+$","")+"/deliveries/ack")).timeout(Duration.ofSeconds(8)).header("Authorization","Bearer "+secret).POST(HttpRequest.BodyPublishers.ofString(id,StandardCharsets.UTF_8)).build();httpClient.send(req,HttpResponse.BodyHandlers.discarding());}catch(Exception e){getLogger().fine("Ack delivery "+id+": "+e.getMessage());}});}
+    private static final class AdminHolder implements InventoryHolder { private Inventory inventory; @Override public Inventory getInventory(){return inventory;} }
 
     private static final class WalletHolder implements InventoryHolder {
         private Inventory inventory;
