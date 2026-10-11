@@ -12,6 +12,7 @@ commands:
   vpln:
     description: Saldo, administracja walutą i mnożnik nagród.
     usage: /vpln help
+    aliases: [vplnadmin]
 permissions:
   freeskyvpln.admin:
     description: Zarządzanie saldami VPLN i mnożnikiem nagród.
