@@ -2,6 +2,7 @@ package pl.freesky.vpln;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -149,7 +150,7 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
 
     private void openWallet(Player player) {
         WalletHolder holder = new WalletHolder();
-        Inventory inv = Bukkit.createInventory(holder, GUI_SIZE, Component.text("§2§lFreeSky §8» §aPortfel"));
+        Inventory inv = Bukkit.createInventory(holder, GUI_SIZE, LegacyComponentSerializer.legacySection().deserialize("§2§lFreeSky §8» §aPortfel"));
         holder.inventory = inv;
         ItemStack border = named(Material.GRAY_STAINED_GLASS_PANE, "§r");
         for (int i = 0; i < GUI_SIZE; i++) {
@@ -202,10 +203,10 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
     private ItemStack named(Material material, String name, String... lore) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
-        meta.displayName(Component.text(name.replace("&", "§")));
+        meta.displayName(LegacyComponentSerializer.legacySection().deserialize(name.replace("&", "§")));
         if (lore.length > 0) {
             List<Component> lines = new ArrayList<>();
-            for (String line : lore) lines.add(Component.text(line.replace("&", "§")));
+            for (String line : lore) lines.add(LegacyComponentSerializer.legacySection().deserialize(line.replace("&", "§")));
             meta.lore(lines);
         }
         item.setItemMeta(meta);
@@ -244,12 +245,13 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
         boolean commandReward = !commands.isEmpty();
         ItemStack reward = null;
         if (!commandReward && material != null && !material.isAir()) {
-            reward = new ItemStack(material, Math.max(1, Math.min(material.getMaxStackSize(), amount)));
-            Map<Integer, ItemStack> leftovers = player.getInventory().addItem(reward);
-            if (!leftovers.isEmpty()) {
+            int safeAmount = Math.max(1, amount);
+            reward = new ItemStack(material, safeAmount);
+            if (!canFit(player, reward)) {
                 player.sendMessage("§cZwolnij miejsce w ekwipunku przed zakupem.");
                 return;
             }
+            player.getInventory().addItem(reward.clone());
         } else if (!commandReward) {
             player.sendMessage("§cProdukt nie ma poprawnie skonfigurowanej nagrody.");
             return;
@@ -268,7 +270,7 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
         String subtitle = getConfig().getString("announcements.subtitle", "§f%player% §7kupił §a%product% §7za §e%price% VPLN")
                 .replace("%player%", player.getName()).replace("%product%", productName).replace("%price%", Long.toString(price));
         for (Player online : Bukkit.getOnlinePlayers()) {
-            online.showTitle(Title.title(Component.text(title.replace("&", "§")), Component.text(subtitle.replace("&", "§"))));
+            online.showTitle(Title.title(LegacyComponentSerializer.legacySection().deserialize(title.replace("&", "§")), LegacyComponentSerializer.legacySection().deserialize(subtitle.replace("&", "§"))));
         }
         Bukkit.broadcastMessage("§8[§aFreeSky§8] §f" + player.getName() + " §7kupił §a" + productName + " §7za §e" + price + " VPLN§7!");
         openWallet(player);
