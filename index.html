@@ -204,8 +204,8 @@ body[data-theme="light"] .terms-box{background:#fff;color:#17202a}body[data-them
 
 
 /* Delikatne animacje i cząsteczki tła */
-#particleField{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:strict;opacity:.62}
-#particleField .particle{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;background:var(--green);opacity:var(--o);box-shadow:0 0 9px #7cf29a70;animation:particleDrift var(--d) ease-in-out var(--delay) infinite alternate}
+#particleField{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;contain:strict;opacity:.62;will-change:contents}
+#particleField .particle{position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);border-radius:50%;background:var(--green);opacity:var(--o);box-shadow:0 0 9px #7cf29a70;animation:particleDrift var(--d) ease-in-out var(--delay) infinite alternate;will-change:transform}
 #particleField .particle:nth-child(3n){border-radius:2px;transform:rotate(45deg);background:#c3ffd0;box-shadow:0 0 8px #7cf29a50}
 body>.wrap{position:relative;z-index:1}
 .nav,.stat,.product,.cart,.rank,.activity-panel,.ranking-empty,.mode-card,.admin-section,.staff-card,.player-tile{transition:transform .28s ease,border-color .28s ease,background-color .28s ease,box-shadow .28s ease}
@@ -282,7 +282,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")termsModal.classList
 (function(){
  const field=document.getElementById("particleField");
  if(!field||window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;
- const count=window.matchMedia("(max-width: 600px)").matches?18:32;
+ const count=window.matchMedia("(max-width: 600px)").matches?48:95;
  const frag=document.createDocumentFragment();
  for(let i=0;i<count;i++){
   const p=document.createElement("i");
@@ -293,8 +293,8 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")termsModal.classList
   p.style.setProperty("--o",(0.18+Math.random()*0.38).toFixed(2));
   p.style.setProperty("--d",(5+Math.random()*9)+"s");
   p.style.setProperty("--delay",(-Math.random()*12)+"s");
-  p.style.setProperty("--dx",(-24+Math.random()*48)+"px");
-  p.style.setProperty("--dy",(-30+Math.random()*60)+"px");
+  p.style.setProperty("--dx",(-12+Math.random()*24)+"px");
+  p.style.setProperty("--dy",(-12+Math.random()*24)+"px");
   frag.appendChild(p);
  }
  field.appendChild(frag);
