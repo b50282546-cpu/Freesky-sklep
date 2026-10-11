@@ -223,9 +223,37 @@ body[data-theme="light"] #particleField{opacity:.28}
 @media(prefers-reduced-motion:reduce){#particleField .particle,.hero-art,.orbit-one,.orbit-two{animation:none!important}*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important}}
 @media(max-width:780px){#particleField{opacity:.42}.hero-art{animation:none}}
 
+
+/* Animacje interakcji i wejścia */
+:root{--motion-ease:cubic-bezier(.2,.75,.25,1)}
+@keyframes fsRiseIn{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes fsLoaderPulse{0%,100%{transform:scale(.92);filter:brightness(.85)}50%{transform:scale(1.08);filter:brightness(1.3)}}
+@keyframes fsLoaderSpin{to{transform:rotate(360deg)}}
+@keyframes fsLoaderBar{from{transform:scaleX(.08)}to{transform:scaleX(1)}}
+body.fs-ready .wrap>*{animation:fsRiseIn .65s var(--motion-ease) both}
+body.fs-ready .wrap>*:nth-child(2){animation-delay:.05s}
+body.fs-ready .wrap>*:nth-child(3){animation-delay:.1s}
+body.fs-ready .wrap>*:nth-child(4){animation-delay:.15s}
+body.fs-ready .wrap>*:nth-child(5){animation-delay:.2s}
+.product,.mode-card,.staff-card,.stat,.player-tile,.rank,.cart,.activity-panel,.ranking-empty,.recruit-banner,.admin-section,.filter,.primary-cta,.secondary-cta,.buy,.theme-toggle,.server button,.terms-link,.foot a,.staff-footer a,.modalbox,.terms-box{transition:transform .24s var(--motion-ease),border-color .24s ease,box-shadow .24s ease,background-color .24s ease,filter .24s ease}
+.product:hover,.mode-card:hover,.staff-card:hover,.stat:hover,.player-tile:hover,.rank:hover,.cart:hover,.activity-panel:hover,.ranking-empty:hover,.recruit-banner:hover,.admin-section:hover{transform:translateY(-4px);border-color:#7cf29a80;box-shadow:0 14px 32px #0003}
+.buy:hover,.primary-cta:hover,.secondary-cta:hover,.theme-toggle:hover,.server button:hover,.terms-link:hover,.filter:hover,.staff-footer a:hover{transform:translateY(-2px);filter:brightness(1.1)}
+button:active,.primary-cta:active,.secondary-cta:active,.mode-card:active{transform:scale(.97)}
+#fsLoader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#080b10;opacity:1;visibility:visible;transition:opacity .45s ease,visibility .45s ease}
+#fsLoader.fs-loader-hidden{opacity:0;visibility:hidden;pointer-events:none}
+.fs-loader-content{display:flex;flex-direction:column;align-items:center;gap:17px}
+.fs-loader-logo{font-size:clamp(36px,8vw,54px);font-weight:1000;letter-spacing:4px;color:#f4f7fa;animation:fsLoaderPulse 1.5s ease-in-out infinite}
+.fs-loader-logo span{color:#7cf29a}
+.fs-loader-ring{width:46px;height:46px;border:3px solid #7cf29a22;border-top-color:#7cf29a;border-radius:50%;animation:fsLoaderSpin .8s linear infinite}
+.fs-loader-caption{font-size:11px;letter-spacing:2px;color:#9aa8b7;text-transform:uppercase}
+.fs-loader-bar{width:160px;height:3px;background:#7cf29a1c;border-radius:9px;overflow:hidden}
+.fs-loader-bar:after{content:"";display:block;width:100%;height:100%;background:#7cf29a;transform-origin:left;animation:fsLoaderBar 1.1s var(--motion-ease) both}
+@media(hover:none){.product:hover,.mode-card:hover,.staff-card:hover,.stat:hover,.player-tile:hover,.rank:hover,.cart:hover,.activity-panel:hover,.ranking-empty:hover,.recruit-banner:hover,.admin-section:hover{transform:none;box-shadow:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}#fsLoader{transition:none}}
+
 </style>
 </head>
-<body><div id="particleField" aria-hidden="true"></div><div class="wrap">
+<body><div id="fsLoader" aria-label="Ładowanie strony" role="status"><div class="fs-loader-content"><div class="fs-loader-logo">FREE<span>SKY</span></div><div class="fs-loader-ring"></div><div class="fs-loader-caption">Ładowanie serwera...</div><div class="fs-loader-bar"></div></div></div><div id="particleField" aria-hidden="true"></div><div class="wrap">
 <header class="nav"><a class="brand" href="#" aria-label="FreeSky strona główna">FREE<span>SKY</span></a><nav class="navlinks"><a href="#tryby">Tryby</a><a href="#ostatnie">Ostatnie zakupy</a><a href="#ranking">Topka</a><a href="#sklep">Sklep</a></nav><div class="server"><span class="iplabel">IP:</span> <strong id="ipText">free1.gemhost.pl:31962</strong><button id="copyIp">Kopiuj IP</button><button id="themeToggle" class="theme-toggle" type="button" aria-label="Włącz jasny motyw" title="Zmień motyw">☀ Jasny</button></div></header>
 <section class="hero"><div class="hero-copy"><span class="eyebrow"><span class="eyedot"></span> OFICJALNY SERWER MINECRAFT</span><h1>Twój ulubiony<br><span>serwer Minecraft!</span></h1><p>Dołącz do społeczności FreeSky i przeżyj niezapomniane przygody. Skopiuj IP serwera i wskakuj do gry!</p><div class="hero-actions"><button class="primary-cta" id="heroCopyIp">▶ SKOPIUJ IP SERWERA</button><a class="secondary-cta" href="https://dc.gg/freesky" target="_blank" rel="noopener noreferrer">DOŁĄCZ NA DISCORDA</a></div><div class="status"><span class="dot"></span> Java Edition • IP: free1.gemhost.pl:31962</div></div><div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="block-scene"><div class="mc-block block-grass"><i></i></div><div class="mc-block block-stone"></div><div class="mc-block block-diamond">◆</div></div><div class="floating-label label-one">✦ MINECRAFT</div><div class="floating-label label-two">✧ FREESKY</div></div></section>
 
@@ -301,6 +329,9 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")termsModal.classList
 })();
 
 document.getElementById("year").textContent=new Date().getFullYear();renderProducts();renderCart();
+
+/* Ekran ładowania i wejściowa animacja strony */
+(function(){const loader=document.getElementById("fsLoader");if(!loader)return;const hide=()=>{document.body.classList.add("fs-ready");loader.classList.add("fs-loader-hidden");setTimeout(()=>loader.remove(),500)};if(document.readyState==="complete")setTimeout(hide,700);else window.addEventListener("load",()=>setTimeout(hide,450),{once:true});setTimeout(hide,2200);})();
 
 /* Motyw zapamiętywany w tej przeglądarce */
 (function(){
