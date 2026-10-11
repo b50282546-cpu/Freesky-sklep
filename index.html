@@ -379,11 +379,13 @@ body[data-theme="dark"] .terms-modal .terms-box,body[data-theme="dark"] .modalbo
 
 
 /* Układ strony głównej: topka korzysta z tych samych kart co administracja. */
-.ranking-grid{margin-top:0}
+.ranking-grid{margin-top:0;grid-template-columns:repeat(3,minmax(0,1fr))}
 .ranking-card{min-height:0}
-.ranking-card .staff-head{align-items:center}
-.ranking-avatar{display:grid;place-items:center;flex:none;object-fit:contain;background:var(--green);color:var(--white);font-size:25px;font-weight:950}
+.ranking-card .staff-head{align-items:center;padding:18px 15px}
+.ranking-avatar{display:grid;place-items:center;flex:none;object-fit:contain;background:#18251d;color:var(--green);font-size:25px;font-weight:950;border:1px solid #7cf29a55}
 .ranking-card .staff-info p{max-width:520px}
+.ranking-card .staff-info h3{font-size:16px}
+@media(max-width:780px){.ranking-grid{grid-template-columns:1fr}}
 
 /* Spójne ciemne przyciski — bez białych teł odstających od wyglądu FreeSky. */
 :root{--panel:#10141b}
@@ -419,7 +421,7 @@ input,select,textarea{color:var(--white)}
 .purchase-ticker-head{display:flex;align-items:center;gap:9px;padding:10px 14px;border-bottom:1px solid #ffffff0c;color:#7cf29a;font-size:10px;font-weight:950;letter-spacing:1.2px}
 .purchase-ticker-head i{width:7px;height:7px;border-radius:50%;background:#7cf29a;box-shadow:0 0 10px #7cf29a;display:inline-block}
 .purchase-ticker-window{overflow:hidden;padding:13px 0}
-.purchase-ticker-track{display:flex;width:max-content;animation:purchaseTickerMove 42s linear infinite}
+.purchase-ticker-track{display:flex;width:max-content;animation:purchaseTickerMove 14s linear infinite}
 .purchase-ticker:hover .purchase-ticker-track{animation-play-state:paused}
 .purchase-ticker-items{display:flex;flex:none;gap:12px;padding-right:12px}
 .purchase-chip{display:flex;align-items:center;gap:10px;white-space:nowrap;padding:9px 13px;border:1px solid #27372e;background:#121d17;border-radius:10px;font-size:12px}
@@ -429,6 +431,14 @@ input,select,textarea{color:var(--white)}
 @keyframes purchaseTickerMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.purchase-ticker-track{animation:none}}
 
+
+/* W trybie ciemnym karty, pola i nawigacja pozostają ciemne. */
+body:not([data-theme="light"]){color-scheme:dark;background-color:#080b10}
+body:not([data-theme="light"]) .nav,body:not([data-theme="light"]) .navlinks,body:not([data-theme="light"]) .player-tile,body:not([data-theme="light"]) .stat,body:not([data-theme="light"]) .product,body:not([data-theme="light"]) .cart,body:not([data-theme="light"]) .rank,body:not([data-theme="light"]) .staff-card,body:not([data-theme="light"]) .mode-card,body:not([data-theme="light"]) .activity-panel,body:not([data-theme="light"]) .ranking-empty,body:not([data-theme="light"]) .modalbox,body:not([data-theme="light"]) .recruit-banner,body:not([data-theme="light"]) .admin-section,body:not([data-theme="light"]) .coupon-row input,body:not([data-theme="light"]) .modalbox input,body:not([data-theme="light"]) .modalbox textarea,body:not([data-theme="light"]) .qty button,body:not([data-theme="light"]) .filter,body:not([data-theme="light"]) .back-home,body:not([data-theme="light"]) .theme-toggle,body:not([data-theme="light"]) .server button{background-color:#10151c;color:var(--white);border-color:#26313d}
+body:not([data-theme="light"]) .navlinks{background:#0b1016}
+body:not([data-theme="light"]) .staff-head{background:transparent}
+body:not([data-theme="light"]) .primary-cta,body:not([data-theme="light"]) .checkout{background:var(--green);color:#07100a;border-color:var(--green)}
+body:not([data-theme="light"]) .purchase-ticker{background:#0d1511}
 </style>
 </head>
 <body><div id="fsLoader" aria-label="Ładowanie strony" role="status"><div class="fs-loader-content"><div class="fs-loader-logo">FREE<span>SKY</span></div><div class="fs-loader-ring"></div><div class="fs-loader-caption">Ładowanie serwera...</div><div class="fs-loader-bar"></div></div></div><div id="particleField" aria-hidden="true"></div><div class="wrap">
@@ -438,7 +448,7 @@ input,select,textarea{color:var(--white)}
 <section class="player-banner" aria-label="Status serwera"><div class="player-tile"><div class="big">●</div><div><strong id="playerCount">Sprawdzanie…</strong><small id="serverStatus">Status serwera</small></div></div><div class="player-tile"><div class="big">↗</div><div><strong id="lastDonor">Brak danych</strong><small>Ostatnie potwierdzone doładowanie</small></div></div><div class="player-tile"><div class="big">♛</div><div><strong id="topDonor">Brak danych</strong><small id="topDonorAmount">Topka wydanych PLN</small></div></div></section>
 <section class="purchase-ticker" aria-label="Ostatnie potwierdzone zakupy"><div class="purchase-ticker-head"><i></i> OSTATNIE ZAKUPY NA FREESKY</div><div class="purchase-ticker-window" id="purchaseTicker"><div class="purchase-ticker-empty">Oczekiwanie na potwierdzone zakupy…</div></div></section>
 <section class="home-section" id="ostatnie"><div class="sectionhead"><div><span class="section-kicker">CO SŁYCHAĆ NA FREESKY</span><h2>Ostatnie zakupy</h2><p>Najnowsze zakupy społeczności FreeSky.</p></div><span class="section-pill">AKTUALNOŚCI</span></div><div class="activity-panel"><div class="activity-symbol">◷</div><div><strong>Brak potwierdzonych zakupów do wyświetlenia</strong><p>Gdy administracja potwierdzi zamówienia, będziemy mogli pokazać je tutaj. Nie wyświetlamy fikcyjnych zakupów.</p></div></div></section>
-<section class="home-section" id="ranking"><div class="sectionhead"><div><span class="section-kicker">GRACZE FREESKY</span><h2>Topka wydanych PLN</h2><p>Ranking będzie obejmował wyłącznie zamówienia potwierdzone przez administrację.</p></div><span class="section-pill">TOP GRACZE</span></div><div class="staff-grid ranking-grid"><article class="staff-card ranking-card"><div class="staff-head"><div class="staff-avatar ranking-avatar" aria-hidden="true">♛</div><div class="staff-info"><span class="staff-role">TOP GRACZE</span><h3>Ranking w przygotowaniu</h3><p>Ranking pokaże graczy na podstawie potwierdzonych zakupów.</p></div></div><div class="staff-footer"><span class="staff-online"><i></i> FreeSky</span><span>Potwierdzone zakupy</span></div></article></div></section>
+<section class="home-section" id="ranking"><div class="sectionhead"><div><span class="section-kicker">GRACZE FREESKY</span><h2>Topka wydanych PLN</h2><p>Ranking będzie obejmował wyłącznie zamówienia potwierdzone przez administrację.</p></div><span class="section-pill">TOP GRACZE</span></div><div class="staff-grid ranking-grid" id="topRanking"><article class="staff-card ranking-card"><div class="staff-head"><div class="staff-avatar ranking-avatar">🥇</div><div class="staff-info"><span class="staff-role">TOP 1</span><h3>Ładowanie…</h3><p>Najwięcej wydanych PLN</p></div></div><div class="staff-footer"><span class="staff-online"><i></i> FreeSky</span><span>Potwierdzone zakupy</span></div></article><article class="staff-card ranking-card"><div class="staff-head"><div class="staff-avatar ranking-avatar">🥈</div><div class="staff-info"><span class="staff-role">TOP 2</span><h3>Ładowanie…</h3><p>Drugie miejsce</p></div></div><div class="staff-footer"><span class="staff-online"><i></i> FreeSky</span><span>Potwierdzone zakupy</span></div></article><article class="staff-card ranking-card"><div class="staff-head"><div class="staff-avatar ranking-avatar">🥉</div><div class="staff-info"><span class="staff-role">TOP 3</span><h3>Ładowanie…</h3><p>Trzecie miejsce</p></div></div><div class="staff-footer"><span class="staff-online"><i></i> FreeSky</span><span>Potwierdzone zakupy</span></div></article></div></section>
 <section class="home-section" id="tryby"><div class="sectionhead"><div><span class="section-kicker">WYBIERZ SWOJĄ PRZYGODĘ</span><h2>Wybierz tryb</h2><p>Kliknij wybraną kartę, aby dołączyć do społeczności lub otworzyć sklep.</p></div></div><div class="mode-grid"><button class="mode-card mode-skypvp" id="openSkyPvP"><span class="mode-icon">⚔</span><span class="mode-label">TRYB SERWERA</span><strong>SkyPvP</strong><small>Kliknij, aby otworzyć sklep trybu SkyPvP</small><span class="mode-arrow">↗</span></button><button class="mode-card mode-discord" id="openPractice"><span class="mode-icon">⚔</span><span class="mode-label">JUŻ WKRÓTCE</span><strong>Anarchia Practice</strong><small>Tryb w przygotowaniu</small><span class="mode-arrow">↗</span></button></div></section>
 
 <button type="button" class="back-home" id="backHome">← Wróć na stronę główną</button><div class="sectionhead store-heading" id="sklep"><div><span class="section-kicker">OFICJALNY SKLEP</span><h2>Sklep FreeSky</h2><p>Wybierz kategorię i dodaj produkty do koszyka.</p></div><span class="section-pill">BEZPIECZNE ZGŁOSZENIA</span></div>
