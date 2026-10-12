@@ -238,7 +238,7 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
         if (!(event.getWhoClicked() instanceof Player player)) return;
         if (event.getClickedInventory() == null || event.getClickedInventory() != event.getView().getTopInventory()) return;
         if (event.getView().getTopInventory().getHolder() instanceof AdminHolder) { handleAdminClick(player,event); return; }
-        if (event.getRawSlot() >= 9 && event.getRawSlot() <= 13) { int idx=event.getRawSlot()-9; if(idx<shopCategories.size()) { openWallet(player,shopCategories.get(idx)); return; } }
+        if (event.getRawSlot() >= 9 && event.getRawSlot() <= 17) { int idx=event.getRawSlot()-9; if(idx<shopCategories.size()) { openWallet(player,shopCategories.get(idx)); return; } }
         if (event.getRawSlot() == 49) { player.closeInventory(); return; }
         ItemStack clicked = event.getCurrentItem();
         if (clicked == null || !clicked.hasItemMeta()) return;
@@ -396,7 +396,7 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
         Inventory inv=Bukkit.createInventory(holder,GUI_SIZE,LegacyComponentSerializer.legacySection().deserialize("§2§lFreeSky §8» §cEdytor sklepu")); holder.inventory=inv; holder.category=category;
         ItemStack border=named(Material.GRAY_STAINED_GLASS_PANE,"§r");
         for(int i=0;i<GUI_SIZE;i++) if(i<9||i>=45||i%9==0||i%9==8) inv.setItem(i,border);
-        for(int i=0;i<shopCategories.size();i++){String cat=shopCategories.get(i);inv.setItem(9+i,named(cat.equals(category)?Material.LIME_DYE:Material.PAPER,(cat.equals(category)?"§a§l":"§f")+cat,"§7Kliknij kategorię."));}
+        for(int i=0;i<Math.min(shopCategories.size(),9);i++){String cat=shopCategories.get(i);inv.setItem(9+i,named(cat.equals(category)?Material.LIME_DYE:Material.PAPER,(cat.equals(category)?"§a§l":"§f")+cat,"§7Kliknij kategorię."));}
         ConfigurationSection shop=getConfig().getConfigurationSection("shop"); int slot=19;
         if(shop!=null) for(String id:shop.getKeys(false)){ConfigurationSection p=shop.getConfigurationSection(id);if(p==null||!p.getString("category","Przedmioty").equals(category))continue;if(slot>=44)break;if(slot%9==0||slot%9==8)slot++;if(slot>=44)break;Material mat=Material.matchMaterial(p.getString("material","EMERALD"));if(mat==null||mat.isAir())mat=Material.EMERALD;
           inv.setItem(slot,named(mat,(p.getBoolean("enabled",true)?"§a":"§c")+p.getString("name",id),"§7Cena: §e"+p.getLong("price",0)+" VPLN","§eLewy klik: +10 VPLN","§ePrawy klik: -10 VPLN","§eShift + klik: włącz/wyłącz","§cShift + prawy: usuń"));slot++;}
@@ -404,9 +404,9 @@ public final class FreeSkyVpln extends JavaPlugin implements Listener, CommandEx
     }
     private void handleAdminClick(Player player,InventoryClickEvent event) {
         if(!player.hasPermission("freeskyvpln.admin")){player.closeInventory();return;} int slot=event.getRawSlot(); ItemStack current=event.getCurrentItem();
-        if(slot>=9&&slot<=13){int idx=slot-9;if(idx<shopCategories.size())openAdmin(player,shopCategories.get(idx));return;}
+        if(slot>=9&&slot<=17){int idx=slot-9;if(idx<shopCategories.size())openAdmin(player,shopCategories.get(idx));return;}
         if(slot==49){player.closeInventory();return;}
-        if(slot==47){String category="Zakładka "+(shopCategories.size()-4);while(shopCategories.contains(category))category="Zakładka "+(shopCategories.size()+1);shopCategories.add(category);getConfig().set("shop-categories",shopCategories);saveConfig();player.sendMessage("§aUtworzono kategorię §e"+category+"§a.");openAdmin(player,category);return;}
+        if(slot==47){if(shopCategories.size()>=9){player.sendMessage("§cOsiągnięto limit 9 zakładek widocznych w GUI.");return;}String category="Zakładka "+(shopCategories.size()-4);while(shopCategories.contains(category))category="Zakładka "+(shopCategories.size()+1);shopCategories.add(category);getConfig().set("shop-categories",shopCategories);saveConfig();player.sendMessage("§aUtworzono kategorię §e"+category+"§a.");openAdmin(player,category);return;}
         if(slot==45){ItemStack hand=player.getInventory().getItemInMainHand();if(hand==null||hand.getType().isAir()){player.sendMessage("§cWeź produkt do ręki.");return;}
           String category=((AdminHolder)event.getView().getTopInventory().getHolder()).category;if(category.equals("Wszystkie"))category="Przedmioty";String id=hand.getType().name().toLowerCase(Locale.ROOT)+"_"+(System.currentTimeMillis()%100000);
           ConfigurationSection p=getConfig().createSection("shop."+id);p.set("enabled",true);p.set("name",hand.hasItemMeta()&&hand.getItemMeta().hasDisplayName()?LegacyComponentSerializer.legacySection().serialize(hand.getItemMeta().displayName()):hand.getType().name().replace('_',' '));p.set("material",hand.getType().name());p.set("amount",Math.max(1,hand.getAmount()));p.set("price",10);p.set("category",category);p.set("lore",List.of("Produkt dodany z panelu GUI."));p.set("commands",List.of());saveConfig();player.sendMessage("§aDodano produkt do kategorii "+category+" za 10 VPLN.");openAdmin(player,category);return;}
