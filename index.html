@@ -555,6 +555,42 @@ body[data-theme="light"]::-webkit-scrollbar-thumb {
 .ranking-avatar-wrap{position:relative;flex:none;width:76px;height:76px}
 .ranking-head{display:block;width:76px;height:76px;object-fit:contain;image-rendering:pixelated;border-radius:12px;background:#26362d;border:1px solid #7cf29a55;padding:4px}
 .ranking-medal{position:absolute;right:-7px;top:-8px;font-size:22px;filter:drop-shadow(0 2px 4px #0009)}
+
+/* FreeSky unified design system — final overrides keep every section consistent. */
+:root{color-scheme:dark;--bg:#080d12;--panel:#111922;--line:#293641;--muted:#a0afba;--green:#7cf29a;--green2:#35c96a;--white:#f4f7fa}
+html{scroll-behavior:smooth}
+body,body[data-theme="light"],body[data-theme="dark"]{color-scheme:dark;background:radial-gradient(ellipse at 50% -18%,#173425 0,transparent 48%),var(--bg);color:var(--white)}
+body[data-theme="light"] .nav,body[data-theme="dark"] .nav{background:#080d12ed;border-bottom-color:#ffffff12}
+body[data-theme="light"] .brand,body[data-theme="dark"] .brand{color:var(--white)}
+body[data-theme="light"] .navlinks a,body[data-theme="dark"] .navlinks a{color:#b7c3ce}
+body[data-theme="light"] .hero h1,body[data-theme="dark"] .hero h1{color:var(--white)}
+body[data-theme="light"] .hero p,body[data-theme="dark"] .hero p{color:var(--muted)}
+body[data-theme="light"] .player-tile,body[data-theme="light"] .stat,body[data-theme="light"] .product,body[data-theme="light"] .cart,body[data-theme="light"] .rank,body[data-theme="light"] .staff-card,body[data-theme="light"] .mode-card,body[data-theme="light"] .activity-panel,body[data-theme="light"] .ranking-empty,body[data-theme="dark"] .player-tile,body[data-theme="dark"] .stat,body[data-theme="dark"] .product,body[data-theme="dark"] .cart,body[data-theme="dark"] .rank,body[data-theme="dark"] .staff-card,body[data-theme="dark"] .mode-card,body[data-theme="dark"] .activity-panel,body[data-theme="dark"] .ranking-empty{background:linear-gradient(145deg,#141e27,#0e151c)!important;border-color:var(--line)!important;color:var(--white);box-shadow:0 8px 24px #0002}
+body[data-theme="light"] .mode-card.mode-skypvp,body[data-theme="light"] .mode-discord,body[data-theme="light"] .mode-join,body[data-theme="dark"] .mode-card.mode-skypvp,body[data-theme="dark"] .mode-discord,body[data-theme="dark"] .mode-join{background:linear-gradient(145deg,#173425,#101720)!important;border-color:#7cf29a44!important;color:var(--white)!important}
+body[data-theme="light"] .mode-icon,body[data-theme="light"] .mode-label,body[data-theme="light"] .mode-arrow,body[data-theme="dark"] .mode-icon,body[data-theme="dark"] .mode-label,body[data-theme="dark"] .mode-arrow{color:var(--green)}
+body[data-theme="light"] .mode-card small,body[data-theme="light"] .product p,body[data-theme="light"] .sub,body[data-theme="light"] .rank p,body[data-theme="light"] .activity-panel p,body[data-theme="light"] .ranking-empty p,body[data-theme="dark"] .mode-card small,body[data-theme="dark"] .product p,body[data-theme="dark"] .sub,body[data-theme="dark"] .rank p,body[data-theme="dark"] .activity-panel p,body[data-theme="dark"] .ranking-empty p{color:var(--muted)}
+body[data-theme="light"] .admin-section,body[data-theme="light"] .recruit-banner,body[data-theme="dark"] .admin-section,body[data-theme="dark"] .recruit-banner{background:linear-gradient(120deg,#14271c,#101720)!important;border-color:#7cf29a35!important;color:var(--white)}
+body[data-theme="light"] .admin-section p,body[data-theme="light"] .recruit-copy p,body[data-theme="dark"] .admin-section p,body[data-theme="dark"] .recruit-copy p{color:var(--muted)}
+body[data-theme="light"] .staff-info .staff-role,body[data-theme="dark"] .staff-info .staff-role{background:#7cf29a18;color:var(--green)}
+body[data-theme="light"] .staff-avatar,body[data-theme="dark"] .staff-avatar{background:#18251e;border-color:#7cf29a44}
+body[data-theme="light"] .filter,body[data-theme="dark"] .filter{background:#101720;color:#b7c3ce;border-color:var(--line)}
+body[data-theme="light"] .filter.active,body[data-theme="light"] .filter:hover,body[data-theme="dark"] .filter.active,body[data-theme="dark"] .filter:hover{background:#7cf29a12;color:var(--green);border-color:#7cf29a70}
+body[data-theme="light"] .buy,body[data-theme="light"] .checkout.ready,body[data-theme="light"] .primary-cta,body[data-theme="dark"] .buy,body[data-theme="dark"] .checkout.ready,body[data-theme="dark"] .primary-cta{background:var(--green);color:#07100a}
+body[data-theme="light"] .secondary-cta,body[data-theme="light"] .back-home,body[data-theme="dark"] .secondary-cta,body[data-theme="dark"] .back-home{background:#101720;color:var(--white);border-color:var(--line)}
+body[data-theme="light"] .coupon-row input,body[data-theme="light"] .modalbox input,body[data-theme="dark"] .coupon-row input,body[data-theme="dark"] .modalbox input{background:#080d12;color:var(--white);border-color:var(--line)}
+body[data-theme="light"] .coupon-row button,body[data-theme="dark"] .coupon-row button{background:#7cf29a12;color:var(--green);border-color:#7cf29a55}
+body[data-theme="light"] .terms-modal .terms-box,body[data-theme="light"] .modalbox,body[data-theme="dark"] .terms-modal .terms-box,body[data-theme="dark"] .modalbox{background:#101720;color:var(--white);border-color:var(--line)}
+body[data-theme="light"] .terms-head,body[data-theme="light"] .terms-modal h3,body[data-theme="dark"] .terms-head,body[data-theme="dark"] .terms-modal h3{color:var(--white)}
+body[data-theme="light"] .terms-modal p,body[data-theme="light"] .terms-modal li,body[data-theme="dark"] .terms-modal p,body[data-theme="dark"] .terms-modal li{color:var(--muted)}
+body[data-theme="light"] .cancel,body[data-theme="dark"] .cancel{color:var(--white)}
+body[data-theme="light"] .foot,body[data-theme="dark"] .foot{border-top-color:#ffffff12;color:var(--muted)}
+body[data-theme="light"] .discord-feature,body[data-theme="dark"] .discord-feature{background:linear-gradient(120deg,#173c29,#10251b);border:1px solid #7cf29a35;box-shadow:0 18px 36px #0002}
+body[data-theme="light"] .discord-feature a,body[data-theme="dark"] .discord-feature a{background:var(--green);color:#07100a}
+.server button,.theme-toggle{background:#101720!important;color:var(--green)!important;border:1px solid var(--line)!important;border-radius:10px}
+.toast{background:#111d16;border-color:#7cf29a66;color:var(--green)}
+@media(max-width:780px){.layout{grid-template-columns:1fr}.cart{grid-row:auto;position:static}.products{grid-template-columns:repeat(2,minmax(0,1fr))}.mode-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:480px){.products{grid-template-columns:1fr}.wrap{width:min(100% - 24px,1160px)}.sectionhead h2{font-size:24px}}
+
 </style>
 </head>
 <body><div id="fsLoader" aria-label="Ładowanie strony" role="status"><div class="fs-loader-content"><div class="fs-loader-logo">FREE<span>SKY</span></div><div class="fs-loader-ring"></div><div class="fs-loader-caption">Ładowanie serwera...</div><div class="fs-loader-bar"></div></div></div><div id="particleField" aria-hidden="true"></div><div class="wrap">
